@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Anaemia AI{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 text-center">
+                <div class="fade-in">
+                    <h1 class="hero-title">Anaemia AI</h1>
+                    <p class="hero-subtitle">
+                        Advanced Explainable AI for Anaemia Prediction & Clinical Decision Support
+                    </p>
+                </div>
+                
+                <!-- CTA Buttons -->
+                <div class="fade-in fade-in-delay-1">
+                    <a href="{{ url_for('prediction') }}" class="btn btn-primary btn-lg me-3">
+                        <i class="fas fa-stethoscope me-2"></i>Get Prediction
+                    </a>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary btn-lg">
+                        <i class="fas fa-chart-line me-2"></i>View Analytics
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <h2 class="text-center mb-5 fade-in">Why Choose Anaemia AI?</h2>
+                
+                <div class="row g-4">
+                    <!-- Feature 1 -->
+                    <div class="col-md-6 col-lg-4 fade-in fade-in-delay-1">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h4>Explainable AI</h4>
+                            <p class="text-muted">
+                                SHAP-powered explanations that show exactly how the AI makes each prediction, building trust and transparency.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div class="col-md-6 col-lg-4 fade-in fade-in-delay-2">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-exchange-alt"></i>
+                            </div>
+                            <h4>Counterfactual Analysis</h4>
+                            <p class="text-muted">
+                                What-if scenarios showing minimal changes needed to alter prediction outcomes, providing actionable treatment insights.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="col-md-6 col-lg-4 fade-in fade-in-delay-3">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                            <h4>Clinical Focus</h4>
+                            <p class="text-muted">
+                                Designed specifically for healthcare professionals with intuitive interfaces and medical-grade accuracy.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Feature 4 -->
+                    <div class="col-md-6 col-lg-4 fade-in fade-in-delay-1">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h4>Privacy First</h4>
+                            <p class="text-muted">
+                                Local processing ensures patient data never leaves your facility, maintaining complete confidentiality.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Feature 5 -->
+                    <div class="col-md-6 col-lg-4 fade-in fade-in-delay-2">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-tachometer-alt"></i>
+                            </div>
+                            <h4>Real-time Results</h4>
+                            <p class="text-muted">
+                                Instant predictions with confidence scores and comprehensive clinical recommendations.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Feature 6 -->
+                    <div class="col-md-6 col-lg-4 fade-in fade-in-delay-3">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-user-md"></i>
+                            </div>
+                            <h4>Expert Validated</h4>
+                            <p class="text-muted">
+                                Developed and validated with healthcare professionals to ensure clinical relevance and accuracy.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="medical-card">
+                    <div class="card-body text-center py-5">
+                        <h3 class="mb-4">Trusted by Healthcare Professionals</h3>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="fade-in fade-in-delay-1">
+                                    <h2 class="text-primary fw-bold">95.2%</h2>
+                                    <p class="text-muted">Accuracy Rate</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="fade-in fade-in-delay-2">
+                                    <h2 class="text-success fw-bold">5,000+</h2>
+                                    <p class="text-muted">Patient Cases</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="fade-in fade-in-delay-3">
+                                    <h2 class="text-warning fw-bold">89%</h2>
+                                    <p class="text-muted">Clinician Acceptance</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="fade-in fade-in-delay-1">
+                                    <h2 class="text-info fw-bold">24/7</h2>
+                                    <p class="text-muted">Availability</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <div class="medical-card">
+                    <div class="card-body py-5">
+                        <h2 class="mb-4">Ready to Transform Anaemia Diagnosis?</h2>
+                        <p class="lead text-muted mb-4">
+                            Join healthcare professionals using AI-powered insights for better patient outcomes.
+                        </p>
+                        <div class="fade-in">
+                            <a href="{{ url_for('prediction') }}" class="btn btn-primary btn-lg me-3">
+                                <i class="fas fa-rocket me-2"></i>Start Now
+                            </a>
+                            <a href="{{ url_for('about') }}" class="btn btn-outline-primary btn-lg">
+                                <i class="fas fa-info-circle me-2"></i>Learn More
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

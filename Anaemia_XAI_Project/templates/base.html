@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Anaemia AI - Explainable Anaemia Prediction System{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">
+                <i class="fas fa-heartbeat me-2"></i>
+                <strong>Anaemia AI</strong>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('index') %}active{% endif %}" href="{{ url_for('index') }}">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('prediction') %}active{% endif %}" href="{{ url_for('prediction') }}">
+                            <i class="fas fa-stethoscope me-1"></i>Prediction
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == url_for('dashboard') %}active{% endif %}" href="{{ url_for('dashboard') }}">
+                            <i class="fas fa-chart-line me-1"></i>Visualizations
+                        </a>
+                    </li>
+                </ul>
+                <div class="nav-auth-actions ms-lg-3">
+                    {% if session.get('user_name') %}
+                        <span class="nav-user-label">{{ session.get('user_name') }}</span>
+                        <a class="btn btn-nav-outline" href="{{ url_for('logout') }}">Logout</a>
+                    {% else %}
+                        <a class="btn btn-nav-outline" href="{{ url_for('login') }}">Login</a>
+                        <a class="btn btn-nav-solid" href="{{ url_for('signup') }}">Sign Up</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <aside class="site-chatbot" id="siteChatbot">
+        <div class="site-chatbot-mascot" aria-hidden="true">
+            <div class="mascot-antenna"></div>
+            <div class="mascot-head">
+                <span class="mascot-eye"></span>
+                <span class="mascot-eye"></span>
+                <span class="mascot-mouth"></span>
+            </div>
+            <div class="mascot-body">
+                <span class="mascot-core"></span>
+                <span class="mascot-button mascot-button-red"></span>
+                <span class="mascot-button mascot-button-blue"></span>
+            </div>
+            <div class="mascot-arm mascot-arm-left"></div>
+            <div class="mascot-arm mascot-arm-right"></div>
+            <div class="mascot-leg mascot-leg-left"></div>
+            <div class="mascot-leg mascot-leg-right"></div>
+        </div>
+        <button class="site-chatbot-toggle" type="button" id="siteChatbotToggle" aria-expanded="false" aria-controls="siteChatbotPanel">
+            <span class="site-chatbot-toggle-label">Ask Nini</span>
+        </button>
+        <div class="site-chatbot-panel" id="siteChatbotPanel" hidden>
+            <div class="site-chatbot-header">
+                <div class="site-chatbot-avatar">🤖</div>
+                <h3>Nini</h3>
+                <p>Your anaemia AI helper for quick guidance.</p>
+            </div>
+            <div class="site-chatbot-messages" id="siteChatbotMessages">
+                <div class="site-chatbot-bubble site-chatbot-bubble-bot">
+                    Hi, I am Nini. You can ask me about the site, predictions, reports, sign up, or just say hello.
+                </div>
+            </div>
+            <div class="site-chatbot-quick-actions">
+                <button type="button" class="site-chatbot-chip" data-chatbot-question="How do I use prediction?">Use prediction</button>
+                <button type="button" class="site-chatbot-chip" data-chatbot-question="What does confidence mean?">Confidence</button>
+                <button type="button" class="site-chatbot-chip" data-chatbot-question="How do I sign up?">Sign up help</button>
+                <button type="button" class="site-chatbot-chip" data-chatbot-question="How do I read the report?">Read report</button>
+            </div>
+            <form class="site-chatbot-form" id="siteChatbotForm">
+                <input type="text" id="siteChatbotInput" placeholder="Type your question here">
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="container mb-3">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} auth-alert" role="alert">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/motion.js') }}"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

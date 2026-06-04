@@ -1,0 +1,58 @@
+[
+  {
+    "username": "niniuser",
+    "full_name": "Nini User",
+    "email": "nini@example.com",
+    "contact_number": "9876543211",
+    "password_hash": "19513fdc9da4fb72a4a05eb66917548d3c90ff94d5419e1f2363eea89dfee1dd"
+  },
+  {
+    "username": "bluecheck",
+    "full_name": "Blue Check",
+    "email": "bluecheck@example.com",
+    "contact_number": "9876543211",
+    "password_hash": "19513fdc9da4fb72a4a05eb66917548d3c90ff94d5419e1f2363eea89dfee1dd"
+  },
+  {
+    "username": "visibleflow",
+    "full_name": "Visible Flow",
+    "email": "visibleflow@example.com",
+    "contact_number": "9876543211",
+    "password_hash": "19513fdc9da4fb72a4a05eb66917548d3c90ff94d5419e1f2363eea89dfee1dd"
+  },
+  {
+    "username": "t1",
+    "full_name": "Test One",
+    "email": "testone@example.com",
+    "contact_number": "9999999999",
+    "password_hash": "19513fdc9da4fb72a4a05eb66917548d3c90ff94d5419e1f2363eea89dfee1dd"
+  },
+  {
+    "username": "submitcheck",
+    "full_name": "Submit Check",
+    "email": "submitcheck@example.com",
+    "contact_number": "9999999999",
+    "password_hash": "4ee33bac59675856c9d8f9ddfaf21368a08f8afe7827516c6d031b8859064229"
+  },
+  {
+    "username": "abiishekk",
+    "full_name": "r",
+    "email": "abi12345@gmail.com",
+    "contact_number": "9841806906",
+    "password_hash": "f64561e04c3be9cea6271afcd2b324f4b8654ed1b011f4f15ff4436e0100d5a0"
+  },
+  {
+    "username": "kishore",
+    "full_name": "kishorekumar",
+    "email": "kisa@gmail.com",
+    "contact_number": "8899124677",
+    "password_hash": "b990941722c232139a9629bb5c00c0488e1203e32575cd48e33a0c2f67534e86"
+  },
+  {
+    "username": "abishek",
+    "full_name": "abishek",
+    "email": "abi@gmail.com",
+    "contact_number": "28749292",
+    "password_hash": "451d05a47e91247fa2c3e9b1f093f07575afbf69c71eb1d315617229d9ba8c86"
+  }
+]

@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+
+{% block title %}Counterfactual Analysis - HemaScope XAI{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Header -->
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold mb-3">Counterfactual Analysis</h1>
+        <p class="lead text-muted">
+            What-if scenarios: Minimal changes needed to alter prediction outcomes
+        </p>
+    </div>
+
+    <!-- What is Counterfactual Section -->
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-exchange-alt me-2"></i>Understanding Counterfactual Reasoning
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="lead">
+                        Counterfactual analysis identifies the smallest changes needed in patient parameters to change the prediction outcome.
+                    </p>
+                    <p>
+                        Instead of just telling you "this patient is anaemic," our system shows you exactly what needs to improve 
+                        to reach a non-anaemic state. This provides actionable insights for treatment planning and patient management.
+                    </p>
+                    <div class="alert alert-info">
+                        <i class="fas fa-lightbulb me-2"></i>
+                        <strong>Clinical Value:</strong> Counterfactuals help clinicians understand which parameters are most critical 
+                        for improving patient outcomes and prioritize interventions.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Counterfactual Visualization -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-line me-2"></i>Counterfactual Changes Analysis
+                    </h5>
+                </div>
+                <div class="card-body text-center">
+                    <img src="{{ url_for('static', filename='images/counterfactual_changes.png') }}" 
+                         alt="Counterfactual Analysis" 
+                         class="img-fluid mb-3"
+                         style="max-height: 400px;"
+                         onerror="this.src='data:image/svg+xml,<svg xmlns=http://www.w3.org/2000/svg width=800 height=400 viewBox=0 0 800 400><rect width=800 height=400 fill=%23f8f9fa/><text x=400 y=200 text-anchor=middle fill=%236c757d font-family=Arial font-size=18>Counterfactual Changes Chart</text></svg>'">
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h6>How to Interpret This Chart:</h6>
+                            <ul class="text-start">
+                                <li><strong>Blue bars:</strong> Current patient values</li>
+                                <li><strong>Orange bars:</strong> Suggested target values</li>
+                                <li><strong>Arrows:</strong> Direction and magnitude of needed change</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Key Insights:</h6>
+                            <ul class="text-start">
+                                <li>Shows minimal changes to alter prediction</li>
+                                <li>Prioritizes most impactful parameters</li>
+                                <li>Provides realistic clinical targets</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Example Scenarios -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-user-md me-2"></i>Clinical Example Scenarios
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card border-warning h-100 mb-3">
+                                <div class="card-header bg-warning text-dark">
+                                    <h6 class="mb-0">Scenario 1: Mild Iron Deficiency</h6>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Current State:</strong> Anaemic</p>
+                                    <p><strong>Key Changes Needed:</strong></p>
+                                    <ul class="small">
+                                        <li>Hemoglobin: 10.2 → 12.5 g/dL (+2.3)</li>
+                                        <li>MCH: 25.8 → 29.0 pg (+3.2)</li>
+                                    </ul>
+                                    <p><strong>Recommended Action:</strong> Iron supplementation and dietary changes</p>
+                                    <div class="badge bg-warning">3-6 months to target</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card border-success h-100 mb-3">
+                                <div class="card-header bg-success text-white">
+                                    <h6 class="mb-0">Scenario 2: Borderline Values</h6>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Current State:</strong> Anaemic</p>
+                                    <p><strong>Key Changes Needed:</strong></p>
+                                    <ul class="small">
+                                        <li>Hemoglobin: 11.8 → 12.2 g/dL (+0.4)</li>
+                                        <li>MCV: 78.5 → 82.0 fL (+3.5)</li>
+                                    </ul>
+                                    <p><strong>Recommended Action:</strong> Nutritional optimization and monitoring</p>
+                                    <div class="badge bg-success">1-2 months to target</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Algorithm Explanation -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-cogs me-2"></i>How Counterfactuals Are Generated
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-search text-primary me-2"></i>Optimization Algorithm</h6>
+                            <p>
+                                Our system uses gradient-based optimization to find the minimal changes needed 
+                                to cross the decision boundary. The algorithm prioritizes changes that are:
+                            </p>
+                            <ul class="small">
+                                <li>Clinically realistic and achievable</li>
+                                <li>Minimal in magnitude</li>
+                                <li>Most impactful on prediction outcome</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-balance-scale text-success me-2"></i>Clinical Constraints</h6>
+                            <p>
+                                The counterfactual generator respects medical constraints:
+                            </p>
+                            <ul class="small">
+                                <li>Normal physiological ranges</li>
+                                <li>Gender-specific reference values</li>
+                                <li>Realistic treatment timelines</li>
+                                <li>Clinical feasibility of changes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Benefits Section -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-heartbeat me-2"></i>Clinical Benefits of Counterfactual Analysis
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="text-center mb-3">
+                                <i class="fas fa-bullseye text-danger" style="font-size: 2rem;"></i>
+                                <h6 class="mt-2">Targeted Treatment</h6>
+                                <p class="small text-muted">
+                                    Focus interventions on parameters that will have the greatest impact
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center mb-3">
+                                <i class="fas fa-clock text-warning" style="font-size: 2rem;"></i>
+                                <h6 class="mt-2">Progress Tracking</h6>
+                                <p class="small text-muted">
+                                    Set realistic milestones and monitor improvement over time
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center mb-3">
+                                <i class="fas fa-comments text-info" style="font-size: 2rem;"></i>
+                                <h6 class="mt-2">Patient Communication</h6>
+                                <p class="small text-muted">
+                                    Explain treatment goals in clear, measurable terms
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Important Note -->
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <strong>Important Clinical Note:</strong> Counterfactual suggestions are based on statistical patterns 
+                and should be used as guidance alongside clinical judgment. Individual patient factors, 
+                comorbidities, and clinical context must always be considered when developing treatment plans.
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

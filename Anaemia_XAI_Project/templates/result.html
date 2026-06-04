@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+
+{% block title %}Prediction Result - Anaemia AI{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% if error %}
+        <!-- Error Display -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="alert alert-danger" role="alert">
+                    <h4 class="alert-heading">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Prediction Error
+                    </h4>
+                    <p>{{ error }}</p>
+                    <hr>
+                    <p class="mb-0">
+                        Please check your input values and try again. If the problem persists, 
+                        contact the system administrator.
+                    </p>
+                </div>
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('prediction') }}" class="btn btn-primary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Prediction
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <!-- Success Result -->
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <!-- Header -->
+                <div class="text-center mb-4">
+                    <h1 class="display-5 fw-bold mb-3">Prediction Results</h1>
+                    <p class="lead text-muted">
+                        AI-powered anaemia assessment with clinical insights
+                    </p>
+                </div>
+
+                <!-- Main Result Card -->
+                <div class="prediction-result {{ 'prediction-anaemic' if result.prediction == 'Anaemic' else 'prediction-non-anaemic' }} mb-4">
+                    <div class="text-center">
+                        <div class="mb-3">
+                            {% if result.prediction == 'Anaemic' %}
+                                <i class="fas fa-exclamation-triangle" style="font-size: 4rem;"></i>
+                            {% else %}
+                                <i class="fas fa-check-circle" style="font-size: 4rem;"></i>
+                            {% endif %}
+                        </div>
+                        <h2 class="display-4 fw-bold mb-3">{{ result.prediction }}</h2>
+                        
+                        <!-- Confidence Bar -->
+                        <div class="mb-3">
+                            <h5>Confidence Score</h5>
+                            <div class="confidence-bar mx-auto" style="max-width: 300px;">
+                                <div class="confidence-fill" style="width: {{ result.confidence }}%;"></div>
+                            </div>
+                            <p class="fw-bold mb-0">{{ result.confidence }}%</p>
+                        </div>
+
+                        <!-- Risk Index -->
+                        <div class="mt-4">
+                            <h5>Anaemia Risk Index</h5>
+                            <div class="d-inline-block">
+                                <span class="badge {% if result.risk_index < 30 %}bg-success{% elif result.risk_index < 60 %}bg-warning{% else %}bg-danger{% endif %} fs-6 px-3 py-2">
+                                    {{ result.risk_index }}% Risk
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Parameters Display -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-user me-2"></i>Patient Parameters
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Gender:</strong> {{ result.input_data.gender|title }}</p>
+                                <p><strong>Hemoglobin:</strong> {{ result.input_data.hemoglobin }} g/dL</p>
+                                <p><strong>MCV:</strong> {{ result.input_data.mcv }} fL</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>MCH:</strong> {{ result.input_data.mch }} pg</p>
+                                <p><strong>MCHC:</strong> {{ result.input_data.mchc }} g/dL</p>
+                                <p><strong>Risk Index:</strong> {{ result.risk_index }}%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clinical Insights -->
+                <div class="row">
+                    <!-- Possible Causes -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-info text-white">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-search me-2"></i>Possible Causes
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <ul class="mb-0">
+                                    {% for cause in result.causes %}
+                                        <li>{{ cause }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Clinical Recommendations -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-success text-white">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-notes-medical me-2"></i>Clinical Recommendations
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <ul class="mb-0">
+                                    {% for recommendation in result.recommendations %}
+                                        <li>{{ recommendation }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Important Precautions -->
+                <div class="card mb-4">
+                    <div class="card-header bg-warning text-dark">
+                        <h6 class="mb-0">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Important Precautions
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            {% for precaution in result.precautions %}
+                                <div class="col-md-6 mb-2">
+                                    <div class="d-flex">
+                                        <i class="fas fa-check-circle text-warning me-2 mt-1"></i>
+                                        <span>{{ precaution }}</span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="text-center mt-4">
+                    <button onclick="printSection('result-section')" class="btn btn-outline-primary me-2">
+                        <i class="fas fa-print me-2"></i>Print Report
+                    </button>
+                    <button onclick="copyToClipboard(window.location.href)" class="btn btn-outline-secondary me-2">
+                        <i class="fas fa-copy me-2"></i>Copy Link
+                    </button>
+                    <a href="{{ url_for('prediction') }}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>New Prediction
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Hidden section for printing -->
+<div id="result-section" style="display: none;">
+    <div class="container">
+        <h2>Prediction Results</h2>
+        {% if result %}
+            <p><strong>Prediction:</strong> {{ result.prediction }}</p>
+            <p><strong>Confidence:</strong> {{ result.confidence }}%</p>
+            <p><strong>Risk Index:</strong> {{ result.risk_index }}%</p>
+            
+            <h3>Patient Parameters</h3>
+            <p><strong>Gender:</strong> {{ result.input_data.gender|title }}</p>
+            <p><strong>Hemoglobin:</strong> {{ result.input_data.hemoglobin }} g/dL</p>
+            <p><strong>MCV:</strong> {{ result.input_data.mcv }} fL</p>
+            <p><strong>MCH:</strong> {{ result.input_data.mch }} pg</p>
+            <p><strong>MCHC:</strong> {{ result.input_data.mchc }} g/dL</p>
+            
+            <h3>Clinical Recommendations</h3>
+            <ul>
+                {% for recommendation in result.recommendations %}
+                    <li>{{ recommendation }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    {% if result %}
+    // Animate confidence bar on page load
+    setTimeout(() => {
+        const confidenceBar = document.querySelector('.confidence-fill');
+        if (confidenceBar) {
+            confidenceBar.style.width = '{{ result.confidence }}%';
+        }
+    }, 500);
+    {% endif %}
+});
+</script>
+{% endblock %}

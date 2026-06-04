@@ -1,0 +1,290 @@
+{% extends "base.html" %}
+
+{% block title %}Prediction - Anaemia AI{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Header -->
+            <div class="text-center mb-5">
+                <h1 class="display-5 fw-bold mb-3">Anaemia Prediction</h1>
+                <p class="lead text-muted">
+                    Enter patient parameters to get AI-powered anaemia prediction with clinical insights
+                </p>
+            </div>
+
+            <!-- Prediction Form -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-stethoscope me-2"></i>
+                        Clinical Parameters
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <!-- Input Method Selection -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="input_method" id="manual_input" value="manual" checked>
+                                <label class="btn btn-outline-primary" for="manual_input">
+                                    <i class="fas fa-keyboard me-2"></i>Manual Entry
+                                </label>
+                                <input type="radio" class="btn-check" name="input_method" id="pdf_input" value="pdf">
+                                <label class="btn btn-outline-primary" for="pdf_input">
+                                    <i class="fas fa-file-pdf me-2"></i>PDF Upload
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Manual Input Form -->
+                    <div id="manual_form">
+                        <form action="/predict" method="POST" id="predictionForm">
+                            <div class="row g-3">
+                                <!-- Gender -->
+                                <div class="col-md-6">
+                                    <label for="gender" class="form-label">
+                                        <i class="fas fa-user me-1"></i>Gender
+                                    </label>
+                                    <select class="form-select" id="gender" name="gender" required>
+                                        <option value="">Select Gender</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select>
+                                </div>
+
+                                <!-- Hemoglobin -->
+                                <div class="col-md-6">
+                                    <label for="hemoglobin" class="form-label">
+                                        <i class="fas fa-tint me-1"></i>Hemoglobin (g/dL)
+                                    </label>
+                                    <input type="number" 
+                                           class="form-control" 
+                                           id="hemoglobin" 
+                                           name="hemoglobin" 
+                                           step="0.1" 
+                                           min="5" 
+                                           max="20" 
+                                           placeholder="12.5" 
+                                           required>
+                                    <div class="form-text">Normal: Male 13.5-17.5, Female 12.0-15.5 g/dL</div>
+                                </div>
+
+                                <!-- MCV -->
+                                <div class="col-md-6">
+                                    <label for="mcv" class="form-label">
+                                        <i class="fas fa-ruler me-1"></i>MCV (fL)
+                                    </label>
+                                    <input type="number" 
+                                           class="form-control" 
+                                           id="mcv" 
+                                           name="mcv" 
+                                           step="0.1" 
+                                           min="60" 
+                                           max="120" 
+                                           placeholder="90" 
+                                           required>
+                                </div>
+
+                                <!-- MCH -->
+                                <div class="col-md-6">
+                                    <label for="mch" class="form-label">
+                                        <i class="fas fa-ruler me-1"></i>MCH (pg)
+                                    </label>
+                                    <input type="number" 
+                                           class="form-control" 
+                                           id="mch" 
+                                           name="mch" 
+                                           step="0.1" 
+                                           min="20" 
+                                           max="40" 
+                                           placeholder="30" 
+                                           required>
+                                </div>
+
+                                <!-- MCHC -->
+                                <div class="col-md-6">
+                                    <label for="mchc" class="form-label">
+                                        <i class="fas fa-ruler me-1"></i>MCHC (g/dL)
+                                    </label>
+                                    <input type="number" 
+                                           class="form-control" 
+                                           id="mchc" 
+                                           name="mchc" 
+                                           step="0.1" 
+                                           min="25" 
+                                           max="40" 
+                                           placeholder="34" 
+                                           required>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="text-center mt-4">
+                                    <button type="submit" class="btn btn-primary btn-lg px-5">
+                                        <i class="fas fa-magic me-2"></i>Get Prediction
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- PDF Upload Form -->
+                    <div id="pdf_form" style="display: none;">
+                        <form action="/upload_pdf" method="POST" enctype="multipart/form-data" id="pdfUploadForm">
+                            <div class="row g-3">
+                                <!-- Gender -->
+                                <div class="col-md-6">
+                                    <label for="pdf_gender" class="form-label">
+                                        <i class="fas fa-user me-1"></i>Patient Gender
+                                    </label>
+                                    <select class="form-select" id="pdf_gender" name="gender" required>
+                                        <option value="">Select Gender</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select>
+                                </div>
+
+                                <!-- PDF File -->
+                                <div class="col-md-6">
+                                    <label for="pdf_file" class="form-label">
+                                        <i class="fas fa-file-pdf me-1"></i>Lab Report (PDF)
+                                    </label>
+                                    <input type="file" 
+                                           class="form-control" 
+                                           id="pdf_file" 
+                                           name="pdf_file" 
+                                           accept=".pdf,application/pdf"
+                                           required>
+                                    <div class="form-text">Upload your complete blood count (CBC) report in PDF format</div>
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="text-center mt-4">
+                                    <button type="submit" class="btn btn-success btn-lg px-5">
+                                        <i class="fas fa-magic me-2"></i>Upload PDF & Predict
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Information Cards -->
+            <div class="row mt-5">
+                <div class="col-md-6">
+                    <div class="medical-card">
+                        <div class="card-header">
+                            <h6 class="mb-0">
+                                <i class="fas fa-info-circle me-2"></i>Parameter Information
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <ul class="mb-0">
+                                <li><strong>Hemoglobin:</strong> Oxygen-carrying protein in red blood cells</li>
+                                <li><strong>MCV:</strong> Mean Corpuscular Volume - average red blood cell size</li>
+                                <li><strong>MCH:</strong> Mean Corpuscular Hemoglobin - average hemoglobin per RBC</li>
+                                <li><strong>MCHC:</strong> Mean Corpuscular Hemoglobin Concentration</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="medical-card">
+                        <div class="card-header bg-warning text-dark">
+                            <h6 class="mb-0">
+                                <i class="fas fa-exclamation-triangle me-2"></i>Clinical Notes
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-0">
+                                This AI model provides predictions based on complete blood count parameters. 
+                                Results should be interpreted by qualified healthcare professionals in conjunction 
+                                with clinical examination and patient history.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const manualRadio = document.getElementById('manual_input');
+    const pdfRadio = document.getElementById('pdf_input');
+    const manualForm = document.getElementById('manual_form');
+    const pdfForm = document.getElementById('pdf_form');
+    
+    // Handle input method toggle
+    manualRadio.addEventListener('change', function() {
+        if (manualRadio.checked) {
+            manualForm.style.display = 'block';
+            pdfForm.style.display = 'none';
+        }
+    });
+    
+    pdfRadio.addEventListener('change', function() {
+        if (pdfRadio.checked) {
+            manualForm.style.display = 'none';
+            pdfForm.style.display = 'block';
+        }
+    });
+    
+    // Calculate and display Anaemia Risk Index for manual form
+    function calculateRiskIndex() {
+        const gender = document.getElementById('gender').value;
+        const hemoglobin = parseFloat(document.getElementById('hemoglobin').value) || 0;
+        const mcv = parseFloat(document.getElementById('mcv').value) || 0;
+        const mch = parseFloat(document.getElementById('mch').value) || 0;
+        const mchc = parseFloat(document.getElementById('mchc').value) || 0;
+        
+        if (!gender || hemoglobin === 0 || mcv === 0 || mch === 0 || mchc === 0) {
+            return;
+        }
+        
+        let riskScore = 0;
+        
+        // Hemoglobin scoring
+        if (gender === 'male') {
+            if (hemoglobin < 13) riskScore += 30;
+            else if (hemoglobin < 14) riskScore += 15;
+        } else {
+            if (hemoglobin < 12) riskScore += 30;
+            else if (hemoglobin < 13) riskScore += 15;
+        }
+        
+        // MCV scoring
+        if (mcv < 80 || mcv > 100) riskScore += 20;
+        
+        // MCH scoring
+        if (mch < 27 || mch > 33) riskScore += 20;
+        
+        // MCHC scoring
+        if (mchc < 32 || mchc > 36) riskScore += 15;
+        
+        const finalRisk = Math.min(riskScore, 100);
+        
+        // Update risk display if it exists
+        const riskDisplay = document.querySelector('#riskIndexDisplay .risk-value');
+        if (riskDisplay) {
+            riskDisplay.textContent = finalRisk;
+        }
+    }
+    
+    // Add event listeners to manual form inputs
+    const inputs = ['gender', 'hemoglobin', 'mcv', 'mch', 'mchc'];
+    inputs.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.addEventListener('input', calculateRiskIndex);
+            element.addEventListener('change', calculateRiskIndex);
+        }
+    });
+});
+</script>
+
+{% endblock %}

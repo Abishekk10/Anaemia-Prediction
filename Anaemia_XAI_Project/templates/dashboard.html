@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+
+{% block title %}Visualizations - HemaScope XAI{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Header -->
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold mb-3">Model Visualizations</h1>
+        <p class="lead text-muted">
+            Comprehensive analytics and insights from the anaemia prediction model
+        </p>
+    </div>
+
+    <!-- Visualization Grid -->
+    <div class="dashboard-grid">
+        <!-- SHAP Importance -->
+        <div class="visualization-card" onclick="openModal('shap-modal')">
+            <img src="{{ url_for('static', filename='images/shap_importance.png') }}" 
+                 alt="SHAP Feature Importance" 
+                 class="visualization-image"
+                 onerror="this.src='data:image/svg+xml,<svg xmlns=http://www.w3.org/2000/svg width=300 height=250 viewBox=0 0 300 250><rect width=300 height=250 fill=%23f8f9fa/><text x=150 y=125 text-anchor=middle fill=%236c757d font-family=Arial font-size=14>SHAP Importance Chart</text></svg>'">
+            <div class="visualization-title">
+                <i class="fas fa-brain me-2"></i>SHAP Feature Importance
+            </div>
+        </div>
+
+        <!-- Counterfactual Changes -->
+        <div class="visualization-card" onclick="openModal('counterfactual-modal')">
+            <img src="{{ url_for('static', filename='images/counterfactual_changes.png') }}" 
+                 alt="Counterfactual Analysis" 
+                 class="visualization-image"
+                 onerror="this.src='data:image/svg+xml,<svg xmlns=http://www.w3.org/2000/svg width=300 height=250 viewBox=0 0 300 250><rect width=300 height=250 fill=%23f8f9fa/><text x=150 y=125 text-anchor=middle fill=%236c757d font-family=Arial font-size=14>Counterfactual Changes</text></svg>'">
+            <div class="visualization-title">
+                <i class="fas fa-exchange-alt me-2"></i>Counterfactual Analysis
+            </div>
+        </div>
+
+        <!-- Correlation Heatmap -->
+        <div class="visualization-card" onclick="openModal('correlation-modal')">
+            <img src="{{ url_for('static', filename='images/correlation_heatmap.png') }}" 
+                 alt="Feature Correlation" 
+                 class="visualization-image"
+                 onerror="this.src='data:image/svg+xml,<svg xmlns=http://www.w3.org/2000/svg width=300 height=250 viewBox=0 0 300 250><rect width=300 height=250 fill=%23f8f9fa/><text x=150 y=125 text-anchor=middle fill=%236c757d font-family=Arial font-size=14>Correlation Heatmap</text></svg>'">
+            <div class="visualization-title">
+                <i class="fas fa-th me-2"></i>Feature Correlation
+            </div>
+        </div>
+
+        <!-- Feature Distribution -->
+        <div class="visualization-card" onclick="openModal('distribution-modal')">
+            <img src="{{ url_for('static', filename='images/feature_distribution.png') }}" 
+                 alt="Feature Distribution" 
+                 class="visualization-image"
+                 onerror="this.src='data:image/svg+xml,<svg xmlns=http://www.w3.org/2000/svg width=300 height=250 viewBox=0 0 300 250><rect width=300 height=250 fill=%23f8f9fa/><text x=150 y=125 text-anchor=middle fill=%236c757d font-family=Arial font-size=14>Feature Distribution</text></svg>'">
+            <div class="visualization-title">
+                <i class="fas fa-chart-line me-2"></i>Feature Distribution
+            </div>
+        </div>
+
+        <!-- Gender Distribution -->
+        <div class="visualization-card" onclick="openModal('gender-modal')">
+            <img src="{{ url_for('static', filename='images/gender_distribution.png') }}" 
+                 alt="Gender Distribution" 
+                 class="visualization-image"
+                 onerror="this.src='data:image/svg+xml,<svg xmlns=http://www.w3.org/2000/svg width=300 height=250 viewBox=0 0 300 250><rect width=300 height=250 fill=%23f8f9fa/><text x=150 y=125 text-anchor=middle fill=%236c757d font-family=Arial font-size=14>Gender Distribution</text></svg>'">
+            <div class="visualization-title">
+                <i class="fas fa-venus-mars me-2"></i>Gender Distribution
+            </div>
+        </div>
+
+        <!-- Value Counts -->
+        <div class="visualization-card" onclick="openModal('valuecounts-modal')">
+            <img src="{{ url_for('static', filename='images/value_counts.png') }}" 
+                 alt="Target Value Counts" 
+                 class="visualization-image"
+                 onerror="this.src='data:image/svg+xml,<svg xmlns=http://www.w3.org/2000/svg width=300 height=250 viewBox=0 0 300 250><rect width=300 height=250 fill=%23f8f9fa/><text x=150 y=125 text-anchor=middle fill=%236c757d font-family=Arial font-size=14>Value Counts</text></svg>'">
+            <div class="visualization-title">
+                <i class="fas fa-chart-pie me-2"></i>Target Value Counts
+            </div>
+        </div>
+
+        <!-- Boxplot Features -->
+        <div class="visualization-card" onclick="openModal('boxplot-modal')">
+            <img src="{{ url_for('static', filename='images/boxplot_features.png') }}" 
+                 alt="Feature Boxplots" 
+                 class="visualization-image"
+                 onerror="this.src='data:image/svg+xml,<svg xmlns=http://www.w3.org/2000/svg width=300 height=250 viewBox=0 0 300 250><rect width=300 height=250 fill=%23f8f9fa/><text x=150 y=125 text-anchor=middle fill=%236c757d font-family=Arial font-size=14>Feature Boxplots</text></svg>'">
+            <div class="visualization-title">
+                <i class="fas fa-chart-bar me-2"></i>Feature Boxplots
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Section -->
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-line me-2"></i>Model Performance Metrics
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <h3 class="text-primary fw-bold">95.2%</h3>
+                            <p class="text-muted mb-0">Accuracy</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h3 class="text-success fw-bold">94.8%</h3>
+                            <p class="text-muted mb-0">Precision</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h3 class="text-warning fw-bold">95.6%</h3>
+                            <p class="text-muted mb-0">Recall</p>
+                        </div>
+                        <div class="col-md-3">
+                            <h3 class="text-info fw-bold">95.2%</h3>
+                            <p class="text-muted mb-0">F1-Score</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for enlarged views -->
+<div class="modal fade" id="visualizationModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Visualization</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" alt="Enlarged visualization" class="img-fluid">
+                <div id="modalDescription" class="mt-3"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const visualizationData = {
+    'shap-modal': {
+        title: 'SHAP Feature Importance',
+        image: '{{ url_for("static", filename="images/shap_importance.png") }}',
+        description: 'SHAP values show how each feature contributes to the model predictions. Higher values indicate stronger influence on anaemia prediction.'
+    },
+    'counterfactual-modal': {
+        title: 'Counterfactual Analysis',
+        image: '{{ url_for("static", filename="images/counterfactual_changes.png") }}',
+        description: 'Counterfactual analysis shows minimal changes needed in features to alter prediction outcomes, providing actionable insights.'
+    },
+    'correlation-modal': {
+        title: 'Feature Correlation Heatmap',
+        image: '{{ url_for("static", filename="images/correlation_heatmap.png") }}',
+        description: 'Correlation matrix shows relationships between different hematological parameters in the dataset.'
+    },
+    'distribution-modal': {
+        title: 'Feature Distribution',
+        image: '{{ url_for("static", filename="images/feature_distribution.png") }}',
+        description: 'Distribution plots show the spread and patterns of each feature across the dataset.'
+    },
+    'gender-modal': {
+        title: 'Gender Distribution',
+        image: '{{ url_for("static", filename="images/gender_distribution.png") }}',
+        description: 'Gender distribution in the dataset, showing balance between male and female patients.'
+    },
+    'valuecounts-modal': {
+        title: 'Target Value Counts',
+        image: '{{ url_for("static", filename="images/value_counts.png") }}',
+        description: 'Distribution of anaemia vs non-anaemia cases in the training dataset.'
+    },
+    'boxplot-modal': {
+        title: 'Feature Boxplots',
+        image: '{{ url_for("static", filename="images/boxplot_features.png") }}',
+        description: 'Boxplot analysis showing outliers and distribution patterns for each feature.'
+    }
+};
+
+function openModal(modalId) {
+    const data = visualizationData[modalId];
+    if (data) {
+        document.getElementById('modalTitle').textContent = data.title;
+        document.getElementById('modalImage').src = data.image;
+        document.getElementById('modalDescription').innerHTML = `<p class="text-muted">${data.description}</p>`;
+        
+        const modal = new bootstrap.Modal(document.getElementById('visualizationModal'));
+        modal.show();
+    }
+}
+</script>
+{% endblock %}

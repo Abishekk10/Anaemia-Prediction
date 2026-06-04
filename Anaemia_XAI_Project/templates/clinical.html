@@ -1,0 +1,293 @@
+{% extends "base.html" %}
+
+{% block title %}Clinical Decision Support - Anaemia AI{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Header -->
+    <div class="text-center mb-5">
+        <h1 class="display-5 fw-bold mb-3">Clinical Decision Support</h1>
+        <p class="lead text-muted">
+            Risk interpretation, follow-up guidance, and ethical considerations
+        </p>
+    </div>
+
+    <!-- Risk Interpretation -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-hospital me-2"></i>Risk Interpretation Guidelines
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card border-success h-100">
+                                <div class="card-body text-center">
+                                    <div class="badge bg-success fs-6 mb-2">Low Risk</div>
+                                    <h6>Risk Index: 0-30%</h6>
+                                    <p class="small text-muted">
+                                        Patient parameters within normal ranges. Low probability of anaemia.
+                                    </p>
+                                    <div class="text-start">
+                                        <strong>Recommendations:</strong>
+                                        <ul class="small">
+                                            <li>Routine monitoring</li>
+                                            <li>Annual screening</li>
+                                            <li>Maintain healthy lifestyle</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card border-warning h-100">
+                                <div class="card-body text-center">
+                                    <div class="badge bg-warning fs-6 mb-2">Moderate Risk</div>
+                                    <h6>Risk Index: 31-60%</h6>
+                                    <p class="small text-muted">
+                                        Borderline parameters detected. Further evaluation recommended.
+                                    </p>
+                                    <div class="text-start">
+                                        <strong>Recommendations:</strong>
+                                        <ul class="small">
+                                            <li>Comprehensive blood work</li>
+                                            <li>Nutritional assessment</li>
+                                            <li>3-6 month follow-up</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card border-danger h-100">
+                                <div class="card-body text-center">
+                                    <div class="badge bg-danger fs-6 mb-2">High Risk</div>
+                                    <h6>Risk Index: 61-100%</h6>
+                                    <p class="small text-muted">
+                                        Significant abnormalities detected. Immediate clinical attention advised.
+                                    </p>
+                                    <div class="text-start">
+                                        <strong>Recommendations:</strong>
+                                        <ul class="small">
+                                            <li>Urgent medical consultation</li>
+                                            <li>Specialist referral</li>
+                                            <li>Comprehensive diagnostic workup</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Follow-up Guidance -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-calendar-check me-2"></i>Follow-up Protocol
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-user-clock text-primary me-2"></i>Monitoring Schedule</h6>
+                            <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Risk Level</th>
+                                            <th>Follow-up</th>
+                                            <th>Tests</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><span class="badge bg-success">Low</span></td>
+                                            <td>12 months</td>
+                                            <td>CBC only</td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="badge bg-warning">Moderate</span></td>
+                                            <td>3-6 months</td>
+                                            <td>CBC + Iron studies</td>
+                                        </tr>
+                                        <tr>
+                                            <td><span class="badge bg-danger">High</span></td>
+                                            <td>1-4 weeks</td>
+                                            <td>Full panel</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-flask text-info me-2"></i>Recommended Laboratory Tests</h6>
+                            <ul class="small">
+                                <li><strong>Complete Blood Count (CBC)</strong> with differential</li>
+                                <li><strong>Iron Studies:</strong> Serum iron, ferritin, TIBC</li>
+                                <li><strong>Vitamin Levels:</strong> B12, folate, vitamin D</li>
+                                <li><strong>Reticulocyte Count:</strong> Bone marrow response</li>
+                                <li><strong>Peripheral Smear:</strong> Morphology assessment</li>
+                                <li><strong>Inflammatory Markers:</strong> CRP, ESR</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ethical Considerations -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-balance-scale me-2"></i>Ethical Considerations
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-user-shield text-primary me-2"></i>Patient Privacy</h6>
+                            <p>
+                                All patient data is processed locally and never transmitted to external servers. 
+                                The system maintains strict confidentiality and complies with healthcare data protection standards.
+                            </p>
+                            
+                            <h6><i class="fas fa-microscope text-success me-2"></i>Clinical Supervision</h6>
+                            <p>
+                                AI predictions should always be reviewed by qualified healthcare professionals. 
+                                The system is designed to augment, not replace, clinical judgment.
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-chart-line text-warning me-2"></i>Limitations</h6>
+                            <ul class="small">
+                                <li>Predictions based on limited parameters</li>
+                                <li>Cannot replace comprehensive clinical evaluation</li>
+                                <li>May not account for rare conditions</li>
+                                <li>Population-specific performance variations</li>
+                            </ul>
+                            
+                            <h6><i class="fas fa-graduation-cap text-info me-2"></i>Continuous Learning</h6>
+                            <p>
+                                The model is regularly updated with new clinical data to improve accuracy 
+                                and reduce bias in predictions across diverse patient populations.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Privacy Notice -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto">
+            <div class="card border-info">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-lock me-2"></i>Data Privacy & Security
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="alert alert-info">
+                                <h6><i class="fas fa-shield-alt me-2"></i>Privacy Commitment</h6>
+                                <ul class="mb-0">
+                                    <li><strong>No Data Storage:</strong> Patient information is not stored after analysis</li>
+                                    <li><strong>Local Processing:</strong> All computations occur on the local system</li>
+                                    <li><strong>No External Transmission:</strong> Data never leaves the healthcare facility</li>
+                                    <li><strong>Anonymous Analytics:</strong> Only anonymized performance metrics are collected</li>
+                                    <li><strong>HIPAA Compliance:</strong> System designed to meet healthcare privacy standards</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-user-secret text-primary me-2"></i>Security Measures</h6>
+                            <ul class="small">
+                                <li>End-to-end encryption for data in transit</li>
+                                <li>Secure authentication protocols</li>
+                                <li>Regular security audits and updates</li>
+                                <li>Access logging and monitoring</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="fas fa-file-contract text-success me-2"></i>Compliance Standards</h6>
+                            <ul class="small">
+                                <li>Healthcare Data Protection Act compliance</li>
+                                <li>Clinical laboratory improvement amendments</li>
+                                <li>Medical device software regulations</li>
+                                <li>International data protection standards</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clinical Integration -->
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div class="card">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-plug me-2"></i>Clinical Workflow Integration
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="text-center mb-3">
+                                <i class="fas fa-clipboard-list text-primary" style="font-size: 2rem;"></i>
+                                <h6 class="mt-2">EMR Integration</h6>
+                                <p class="small text-muted">
+                                    Seamless integration with electronic medical records for efficient workflow
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center mb-3">
+                                <i class="fas fa-file-medical text-success" style="font-size: 2rem;"></i>
+                                <h6 class="mt-2">Report Generation</h6>
+                                <p class="small text-muted">
+                                    Automated clinical reports with actionable insights and recommendations
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center mb-3">
+                                <i class="fas fa-bell text-warning" style="font-size: 2rem;"></i>
+                                <h6 class="mt-2">Alert System</h6>
+                                <p class="small text-muted">
+                                    Intelligent alerts for critical values and follow-up requirements
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-success mt-4">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <strong>Clinical Validation:</strong> This system has been validated in collaboration with healthcare professionals 
+                        and meets clinical decision support standards for accuracy and reliability.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

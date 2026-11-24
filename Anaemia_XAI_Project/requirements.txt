@@ -1,9 +1,12 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
 Flask
 gunicorn
-numpy
+numpy==2.4.6
 pandas
-scikit-learn
+scikit-learn==1.9.0
 shap
 PyMuPDF
 matplotlib
-joblib
+joblib==1.5.3
+scipy==1.17.1
+torch==2.13.0+cpu

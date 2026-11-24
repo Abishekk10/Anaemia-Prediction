@@ -1,44 +1,19 @@
 from flask import Flask, flash, redirect, render_template, request, session, url_for
 import numpy as np
-import pickle
 import os
 import fitz  # PyMuPDF for PDF processing (import as fitz)
 import re
 import json
 import hashlib
+from pytorch_inference import PyTorchInferenceError, predict_pytorch
+from werkzeug.exceptions import RequestEntityTooLarge
 
 app = Flask(__name__)
 app.secret_key = "anaemia-ai-local-auth"
 
 USERS_FILE = os.path.join("data", "users.json")
-
-# Load ML artifacts with fallback
-try:
-    model = pickle.load(open("model/svm_model.pkl", "rb"))
-    scaler = pickle.load(open("model/scaler.pkl", "rb"))
-    print("Model and scaler loaded successfully")
-except FileNotFoundError:
-    print("Model files not found. Creating dummy model for development.")
-    from sklearn.svm import SVC
-    from sklearn.preprocessing import StandardScaler
-    from sklearn.datasets import make_classification
-    
-    # Generate sample data
-    X, y = make_classification(n_samples=1000, n_features=5, n_informative=5, n_redundant=0, random_state=42)
-    
-    # Train and save model
-    model = SVC(kernel='rbf', probability=True, random_state=42)
-    model.fit(X, y)
-    
-    # Create and fit scaler
-    scaler = StandardScaler()
-    scaler.fit(X)
-    
-    # Save the model and scaler
-    os.makedirs('model', exist_ok=True)
-    pickle.dump(model, open("model/svm_model.pkl", "wb"))
-    pickle.dump(scaler, open("model/scaler.pkl", "wb"))
-
+PDF_MAX_BYTES = 5 * 1024 * 1024
+PDF_MAX_PAGES = 20
 
 def load_users():
     if not os.path.exists(USERS_FILE):
@@ -113,40 +88,43 @@ def extract_values_from_pdf(pdf_content):
         match = re.search(r"(?<![a-z])(-?\d+(?:\.\d+)?)(?![a-z])", text)
         return float(match.group(1)) if match else None
 
-    def has_field_label(line, aliases):
-        compact = re.sub(r"[^a-z]", "", line)
-        for alias in aliases:
-            alias_compact = re.sub(r"[^a-z]", "", alias)
-            if compact == alias_compact or line.startswith(alias):
-                return True
-        return False
+    labels = {
+        alias: field
+        for field, config in field_config.items()
+        for alias in config["aliases"]
+    }
+    label_pattern = re.compile(
+        r"^(" + "|".join(map(re.escape, sorted(labels, key=len, reverse=True))) + r")\b"
+    )
 
     # First pass: handle row-style reports where the label and numeric value are separated by a few lines.
     for index, line in enumerate(lines):
-        for field, config in field_config.items():
-            if field in extracted_values or not has_field_label(line, config["aliases"]):
+        label = label_pattern.match(line)
+        if label is None:
+            continue
+        field = labels[label.group()]
+        if field in extracted_values:
+            continue
+
+        same_line_value = extract_number(line[label.end():])
+        if same_line_value is not None and is_plausible(field, same_line_value):
+            extracted_values[field] = same_line_value
+            continue
+
+        for candidate in lines[index + 1:index + 6]:
+            if label_pattern.match(candidate):
+                break
+            if any(token in candidate for token in skip_tokens):
                 continue
-
-            window = lines[index:index + 6]
-
-            # Check the label line itself first for "MCV 83.1" style rows.
-            same_line_value = extract_number(line)
-            if same_line_value is not None and is_plausible(field, same_line_value):
-                extracted_values[field] = same_line_value
-                continue
-
-            for candidate in window[1:]:
-                if any(token in candidate for token in skip_tokens):
-                    continue
-                value = extract_number(candidate)
-                if value is not None and is_plausible(field, value):
-                    extracted_values[field] = value
-                    break
+            value = extract_number(candidate)
+            if value is not None and is_plausible(field, value):
+                extracted_values[field] = value
+                break
 
     # Fallback: tolerate label/value splits across whitespace in the whole document.
     fallback_patterns = {
         "hemoglobin": [
-            r"(?:^|\b)(?:haemoglobin|hemoglobin|hgb|hb)\b(?:[\s:=-]|method|specimen)*(?P<value>\d+(?:\.\d+)?)",
+            r"(?<!mean corpuscular )\b(?:haemoglobin|hemoglobin|hgb|hb)\b(?:[\s:=-]|method|specimen)*(?P<value>\d+(?:\.\d+)?)",
         ],
         "mcv": [
             r"(?:^|\b)(?:mean corpuscular volume|mcv)\b(?:[\s:=-]|method|specimen)*(?P<value>\d+(?:\.\d+)?)",
@@ -181,6 +159,17 @@ def extract_gender_from_pdf(pdf_content):
     if match:
         return match.group(1)
     return None
+
+
+class GenderValidationError(ValueError):
+    pass
+
+
+def validate_gender(gender):
+    if not isinstance(gender, str) or gender.casefold() not in {"male", "female"}:
+        raise GenderValidationError("Gender must be exactly Male or Female.")
+    return gender.casefold()
+
 
 def calculate_anaemia_risk_index(gender, hemoglobin, mcv, mch, mchc):
     """Calculate Anaemia Risk Index (display-only, not passed to scaler)"""
@@ -248,8 +237,8 @@ def calculate_dynamic_confidence(prediction_proba, prediction, risk_index, gende
     return round(max(min(confidence, 99.0), 52.0), 2)
 
 
-def build_prediction_result(gender, hemoglobin, mcv, mch, mchc, source=None):
-    """Run the model and package the full response payload."""
+def build_svm_prediction_result(gender, hemoglobin, mcv, mch, mchc, source=None, *, model, scaler):
+    """Run legacy inference with an explicitly supplied SVM and scaler."""
     risk_index = calculate_anaemia_risk_index(gender, hemoglobin, mcv, mch, mchc)
 
     gender_encoded = 1 if gender.lower() == "male" else 0
@@ -287,6 +276,52 @@ def build_prediction_result(gender, hemoglobin, mcv, mch, mchc, source=None):
         "prediction_proba": prediction_proba,
         "features": features,
         "features_scaled": features_scaled,
+    }
+
+
+def build_prediction_result(gender, hemoglobin, mcv, mch, mchc, source=None):
+    """Run the primary PyTorch model and package the existing response payload."""
+    gender = validate_gender(gender)
+    risk_index = calculate_anaemia_risk_index(gender, hemoglobin, mcv, mch, mchc)
+    gender_encoded = 0 if gender.lower() == "male" else 1
+    inference = predict_pytorch({
+        "Gender": gender_encoded,
+        "Hemoglobin": hemoglobin,
+        "MCH": mch,
+        "MCHC": mchc,
+        "MCV": mcv,
+    })
+    prediction = inference["prediction_index"]
+    prediction_proba = inference["prediction_proba"]
+    confidence = calculate_dynamic_confidence(
+        prediction_proba, prediction, risk_index, gender, hemoglobin, mcv, mch, mchc
+    )
+
+    causes, recommendations, precautions = get_clinical_recommendations(
+        prediction, confidence, risk_index, gender, hemoglobin, mcv, mch, mchc
+    )
+
+    input_data = {
+        "gender": gender,
+        "hemoglobin": hemoglobin,
+        "mcv": mcv,
+        "mch": mch,
+        "mchc": mchc,
+    }
+    if source:
+        input_data["source"] = source
+
+    return {
+        "prediction": "Anaemic" if prediction == 1 else "Non-Anaemic",
+        "confidence": confidence,
+        "risk_index": risk_index,
+        "causes": causes,
+        "recommendations": recommendations,
+        "precautions": precautions,
+        "input_data": input_data,
+        "prediction_proba": prediction_proba,
+        "features": inference["features"],
+        "features_scaled": inference["features_scaled"],
     }
 
 def get_clinical_recommendations(prediction, confidence, risk_index, gender=None, hemoglobin=None, mcv=None, mch=None, mchc=None):
@@ -496,81 +531,78 @@ def upload_pdf():
     if request.method == "GET":
         return render_template("prediction.html")
     
-    print("=== PDF UPLOAD ROUTE CALLED ===")
-    
-    if 'pdf_file' not in request.files:
-        print("No PDF file uploaded")
-        return render_template('result.html', error="No PDF file uploaded")
-    
-    file = request.files['pdf_file']
-    print(f"File received: {file.filename}")
-    
-    if file.filename == '':
-        print("No file selected")
-        return render_template('result.html', error="No file selected")
-    
-    if file and file.filename.lower().endswith('.pdf'):
-        try:
-            print("Starting PDF processing...")
-            # Read PDF content
-            pdf_content = fitz.open(stream=file.read(), filetype="pdf")
-            text = ""
-            for page in pdf_content:
-                text += page.get_text()
-            
-            print(f"Extracted text length: {len(text)}")
-            print(f"First 200 chars: {text[:200]}")
+    # Reserve space for multipart headers and the gender field.
+    request.max_content_length = PDF_MAX_BYTES + 64 * 1024
+    try:
+        file = request.files.get("pdf_file")
+        if file is None:
+            return render_template("result.html", error="No PDF file uploaded")
+        if not file.filename:
+            return render_template("result.html", error="No file selected")
+        if not file.filename.lower().endswith(".pdf"):
+            return render_template("result.html", error="Invalid file format. Please upload a PDF file.")
 
-            if not text.strip():
-                return render_template(
-                    'result.html',
-                    error="This PDF appears to contain no selectable text. If it is a scanned image report, please use a text-based PDF or enter the values manually."
-                )
-            
-            # Extract values from PDF
-            extracted = extract_values_from_pdf(text)
-            print(f"Extracted values: {extracted}")
+        data = file.read(PDF_MAX_BYTES + 1)
+        if len(data) > PDF_MAX_BYTES:
+            raise RequestEntityTooLarge()
+        if not data:
+            return render_template("result.html", error="The uploaded PDF is empty.")
+        if b"%PDF-" not in data[:1024]:
+            return render_template("result.html", error="Invalid file format. Please upload a PDF file.")
 
-            required_fields = ["hemoglobin", "mcv", "mch", "mchc"]
-            missing_fields = [field.upper() for field in required_fields if field not in extracted]
+        with fitz.open(stream=data, filetype="pdf") as document:
+            if not document.is_pdf:
+                return render_template("result.html", error="Invalid file format. Please upload a PDF file.")
+            if document.needs_pass:
+                return render_template("result.html", error="This PDF is password-protected. Please upload an unlocked copy.")
+            if document.page_count > PDF_MAX_PAGES:
+                return render_template("result.html", error=f"Please upload a PDF with at most {PDF_MAX_PAGES} pages."), 413
+            text = "\n".join(page.get_text() for page in document)
 
-            if len(extracted) == 0:
-                return render_template(
-                    'result.html',
-                    error="Could not extract Hb, MCV, MCH, or MCHC from this PDF. Please upload a clearer lab report or use manual entry."
-                )
+        if not text.strip():
+            return render_template(
+                "result.html",
+                error="This PDF appears to contain no selectable text. If it is a scanned image report, please use a text-based PDF or enter the values manually.",
+            )
 
-            if missing_fields:
-                return render_template(
-                    'result.html',
-                    error=f"PDF upload found some values, but these fields are still missing: {', '.join(missing_fields)}. Please use a clearer report or enter the values manually."
-                )
-            
-            # Use extracted values
-            gender = extract_gender_from_pdf(text) or request.form.get('gender', 'male')
-            hemoglobin = extracted['hemoglobin']
-            mcv = extracted['mcv']
-            mch = extracted['mch']
-            mchc = extracted['mchc']
-            
-            print(f"Using values: gender={gender}, hb={hemoglobin}, mcv={mcv}, mch={mch}, mchc={mchc}")
-            
-            result = build_prediction_result(gender, hemoglobin, mcv, mch, mchc, source='PDF Upload')
-            result.pop('prediction_proba', None)
-            result.pop('features', None)
-            result.pop('features_scaled', None)
-            
-            print("PDF processing completed successfully")
-            return render_template('result.html', result=result)
-            
-        except Exception as e:
-            print(f"Error processing PDF: {str(e)}")
-            import traceback
-            traceback.print_exc()
-            return render_template('result.html', error=f"Error processing PDF: {str(e)}")
-    
-    print("Invalid file format received")
-    return render_template('result.html', error="Invalid file format. Please upload a PDF file.")
+        extracted = extract_values_from_pdf(text)
+        required_fields = ("hemoglobin", "mcv", "mch", "mchc")
+        missing_fields = [field.upper() for field in required_fields if field not in extracted]
+        if not extracted:
+            return render_template(
+                "result.html",
+                error="Could not extract Hb, MCV, MCH, or MCHC from this PDF. Please upload a clearer lab report or use manual entry.",
+            )
+        if missing_fields:
+            return render_template(
+                "result.html",
+                error=f"PDF upload found some values, but these fields are still missing: {', '.join(missing_fields)}. Please use a clearer report or enter the values manually.",
+            )
+
+        gender = extract_gender_from_pdf(text)
+        if gender is None:
+            gender = request.form.get("gender")
+        gender = validate_gender(gender)
+        result = build_prediction_result(gender, **extracted, source="PDF Upload")
+        result.pop("prediction_proba", None)
+        result.pop("features", None)
+        result.pop("features_scaled", None)
+        return render_template("result.html", result=result)
+
+    except RequestEntityTooLarge:
+        return render_template("result.html", error=f"Please upload a PDF no larger than {PDF_MAX_BYTES // (1024 * 1024)} MB."), 413
+    except fitz.FileDataError:
+        app.logger.warning("PDF parser rejected the document")
+        return render_template("result.html", error="This PDF is corrupt or unreadable. Please upload a valid PDF.")
+    except GenderValidationError as exc:
+        return render_template("result.html", error=str(exc))
+    except PyTorchInferenceError:
+        app.logger.error("PyTorch PDF prediction failed")
+        return render_template("result.html", error="The prediction model is temporarily unavailable. Please try again later.")
+    except Exception as exc:
+        app.logger.error("PDF processing failed (%s)", type(exc).__name__)
+        return render_template("result.html", error="Could not process this PDF. Please upload a valid PDF or enter the values manually.")
+
 
 @app.route("/test")
 def test_form():
@@ -582,35 +614,28 @@ def simple_test():
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    print("=== PREDICTION ROUTE CALLED ===")
     try:
-        # Get form data
-        gender = request.form['gender']
+        gender = validate_gender(request.form.get('gender'))
         hemoglobin = float(request.form['hemoglobin'])
         mcv = float(request.form['mcv'])
         mch = float(request.form['mch'])
         mchc = float(request.form['mchc'])
-        
-        print(f"Form data received: {gender}, {hemoglobin}, {mcv}, {mch}, {mchc}")
-        
+
         result = build_prediction_result(gender, hemoglobin, mcv, mch, mchc)
-        
-        print(f"Input features: {result['features']}")
-        print(f"Scaled features: {result['features_scaled']}")
-        print(f"Prediction probabilities: {result['prediction_proba']}")
-        print(f"Final confidence: {result['confidence']}")
-        print(f"Risk index: {result['risk_index']}")
-        
+
         result.pop('prediction_proba', None)
         result.pop('features', None)
         result.pop('features_scaled', None)
-        
-        print("Rendering result template")
         return render_template('result.html', result=result)
-        
-    except Exception as e:
-        print(f"Error in prediction: {str(e)}")
-        return render_template('result.html', error=str(e))
+
+    except GenderValidationError as exc:
+        return render_template('result.html', error=str(exc))
+    except PyTorchInferenceError as exc:
+        app.logger.error("PyTorch form prediction failed (%s)", type(exc.__cause__ or exc).__name__)
+        return render_template('result.html', error="The prediction model is temporarily unavailable. Please try again later.")
+    except Exception as exc:
+        app.logger.error("Manual prediction request failed (%s)", type(exc).__name__)
+        return render_template('result.html', error="Could not process this prediction. Please check your inputs and try again.")
 
 # ---------------- DASHBOARD ----------------
 @app.route("/dashboard")
@@ -644,4 +669,4 @@ def about():
 
 # ---------------- RUN ----------------
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=False)

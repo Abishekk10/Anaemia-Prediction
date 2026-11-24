@@ -1,0 +1,20 @@
+{
+    "features": [
+        "Gender",
+        "Hemoglobin",
+        "MCH",
+        "MCHC",
+        "MCV"
+    ],
+    "input_size": 5,
+    "hidden_layers": [
+        64,
+        32
+    ],
+    "output_size": 1,
+    "threshold": 0.5,
+    "class_mapping": {
+        "0": "Non-anaemic",
+        "1": "Anaemic"
+    }
+}

@@ -5,11 +5,17 @@ import fitz  # PyMuPDF for PDF processing (import as fitz)
 import re
 import json
 import hashlib
+import secrets
 from pytorch_inference import PyTorchInferenceError, predict_pytorch
 from werkzeug.exceptions import RequestEntityTooLarge
 
 app = Flask(__name__)
-app.secret_key = "anaemia-ai-local-auth"
+secret_key = os.environ.get("FLASK_SECRET_KEY", "")
+if not secret_key.strip():
+    if os.environ.get("RENDER") == "true":
+        raise RuntimeError("FLASK_SECRET_KEY must be set for the Render service.")
+    secret_key = secrets.token_hex(32)
+app.secret_key = secret_key
 
 USERS_FILE = os.path.join("data", "users.json")
 PDF_MAX_BYTES = 5 * 1024 * 1024

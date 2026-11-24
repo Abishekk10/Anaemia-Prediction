@@ -38,6 +38,38 @@ def guard_legacy_artifacts():
 
 
 class AppStartupTests(unittest.TestCase):
+    def test_render_uses_configured_session_key(self):
+        with (
+            patch.object(sys, "path", [str(APP_DIR), *sys.path]),
+            patch.dict(os.environ, {"RENDER": "true", "FLASK_SECRET_KEY": "test-only-key"}),
+        ):
+            module = runpy.run_path(str(APP_DIR / "app.py"))
+
+        self.assertEqual(module["app"].secret_key, "test-only-key")
+
+    def test_render_requires_nonblank_session_key(self):
+        for env in ({"RENDER": "true"}, {"RENDER": "true", "FLASK_SECRET_KEY": "   "}):
+            with (
+                self.subTest(configured="FLASK_SECRET_KEY" in env),
+                patch.object(sys, "path", [str(APP_DIR), *sys.path]),
+                patch.dict(os.environ, env, clear=True),
+                self.assertRaisesRegex(RuntimeError, "FLASK_SECRET_KEY must be set"),
+            ):
+                runpy.run_path(str(APP_DIR / "app.py"))
+
+    def test_local_startup_without_configured_key_can_sign_sessions(self):
+        with (
+            patch.object(sys, "path", [str(APP_DIR), *sys.path]),
+            patch.dict(os.environ, {}, clear=True),
+        ):
+            app = runpy.run_path(str(APP_DIR / "app.py"))["app"]
+
+        client = app.test_client()
+        with client.session_transaction() as session:
+            session["user_name"] = "Local test user"
+        with client.session_transaction() as session:
+            self.assertEqual(session["user_name"], "Local test user")
+
     def test_direct_run_disables_debug_mode(self):
         with (
             patch.object(sys, "path", [str(APP_DIR), *sys.path]),

@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}Clinical Decision Support - Anaemia AI{% endblock %}
+{% block title %}Research Use and Limitations{% endblock %}
 
 {% block content %}
 <div class="container">
     <!-- Header -->
     <div class="text-center mb-5">
-        <h1 class="display-5 fw-bold mb-3">Clinical Decision Support</h1>
+        <h1 class="display-5 fw-bold mb-3">Research Use and Limitations</h1>
         <p class="lead text-muted">
-            Risk interpretation, follow-up guidance, and ethical considerations
+            How to interpret prototype results and what to know before submitting data
         </p>
     </div>
 
@@ -27,16 +27,16 @@
                             <div class="card border-success h-100">
                                 <div class="card-body text-center">
                                     <div class="badge bg-success fs-6 mb-2">Low Risk</div>
-                                    <h6>Risk Index: 0-30%</h6>
+                                    <h6>Risk Index: 0-30</h6>
                                     <p class="small text-muted">
-                                        Patient parameters within normal ranges. Low probability of anaemia.
+                                        Lower range of the prototype's rule-based score. This score is not a probability.
                                     </p>
                                     <div class="text-start">
-                                        <strong>Recommendations:</strong>
+                                        <strong>Interpretation:</strong>
                                         <ul class="small">
-                                            <li>Routine monitoring</li>
-                                            <li>Annual screening</li>
-                                            <li>Maintain healthy lifestyle</li>
+                                            <li>Check the entered CBC values</li>
+                                            <li>Use the report's reference ranges for context</li>
+                                            <li>A low score cannot rule out anaemia</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -46,16 +46,16 @@
                             <div class="card border-warning h-100">
                                 <div class="card-body text-center">
                                     <div class="badge bg-warning fs-6 mb-2">Moderate Risk</div>
-                                    <h6>Risk Index: 31-60%</h6>
+                                    <h6>Risk Index: 31-60</h6>
                                     <p class="small text-muted">
-                                        Borderline parameters detected. Further evaluation recommended.
+                                        Middle range of the prototype's rule-based score.
                                     </p>
                                     <div class="text-start">
-                                        <strong>Recommendations:</strong>
+                                        <strong>Interpretation:</strong>
                                         <ul class="small">
-                                            <li>Comprehensive blood work</li>
-                                            <li>Nutritional assessment</li>
-                                            <li>3-6 month follow-up</li>
+                                            <li>Check units and transcription</li>
+                                            <li>Consider the full report when interpreting values</li>
+                                            <li>The score does not set follow-up timing</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -65,16 +65,16 @@
                             <div class="card border-danger h-100">
                                 <div class="card-body text-center">
                                     <div class="badge bg-danger fs-6 mb-2">High Risk</div>
-                                    <h6>Risk Index: 61-100%</h6>
+                                    <h6>Risk Index: 61-100</h6>
                                     <p class="small text-muted">
-                                        Significant abnormalities detected. Immediate clinical attention advised.
+                                        Upper range of the prototype's rule-based score.
                                     </p>
                                     <div class="text-start">
-                                        <strong>Recommendations:</strong>
+                                        <strong>Interpretation:</strong>
                                         <ul class="small">
-                                            <li>Urgent medical consultation</li>
-                                            <li>Specialist referral</li>
-                                            <li>Comprehensive diagnostic workup</li>
+                                            <li>The score does not measure severity</li>
+                                            <li>The score does not determine urgency</li>
+                                            <li>Clinical interpretation requires other information</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -98,45 +98,45 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
-                            <h6><i class="fas fa-user-clock text-primary me-2"></i>Monitoring Schedule</h6>
+                            <h6><i class="fas fa-user-clock text-primary me-2"></i>Score Interpretation</h6>
                             <div class="table-responsive">
                                 <table class="table table-sm">
                                     <thead>
                                         <tr>
                                             <th>Risk Level</th>
-                                            <th>Follow-up</th>
-                                            <th>Tests</th>
+                                            <th>Range</th>
+                                            <th>Interpretation</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td><span class="badge bg-success">Low</span></td>
-                                            <td>12 months</td>
-                                            <td>CBC only</td>
+                                            <td>0–30</td>
+                                            <td>Does not rule out anaemia</td>
                                         </tr>
                                         <tr>
                                             <td><span class="badge bg-warning">Moderate</span></td>
-                                            <td>3-6 months</td>
-                                            <td>CBC + Iron studies</td>
+                                            <td>31–60</td>
+                                            <td>Does not determine follow-up</td>
                                         </tr>
                                         <tr>
                                             <td><span class="badge bg-danger">High</span></td>
-                                            <td>1-4 weeks</td>
-                                            <td>Full panel</td>
+                                            <td>61–100</td>
+                                            <td>Does not determine urgency</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <h6><i class="fas fa-flask text-info me-2"></i>Recommended Laboratory Tests</h6>
+                            <h6><i class="fas fa-flask text-info me-2"></i>CBC Inputs and Result</h6>
                             <ul class="small">
-                                <li><strong>Complete Blood Count (CBC)</strong> with differential</li>
-                                <li><strong>Iron Studies:</strong> Serum iron, ferritin, TIBC</li>
-                                <li><strong>Vitamin Levels:</strong> B12, folate, vitamin D</li>
-                                <li><strong>Reticulocyte Count:</strong> Bone marrow response</li>
-                                <li><strong>Peripheral Smear:</strong> Morphology assessment</li>
-                                <li><strong>Inflammatory Markers:</strong> CRP, ESR</li>
+                                <li><strong>Gender</strong> is a model input</li>
+                                <li><strong>Hemoglobin</strong> is a model input</li>
+                                <li><strong>MCV</strong> is a model input</li>
+                                <li><strong>MCH</strong> is a model input</li>
+                                <li><strong>MCHC</strong> is a model input</li>
+                                <li><strong>Prediction</strong> is an anaemic or non-anaemic classification</li>
                             </ul>
                         </div>
                     </div>
@@ -159,14 +159,13 @@
                         <div class="col-md-6">
                             <h6><i class="fas fa-user-shield text-primary me-2"></i>Patient Privacy</h6>
                             <p>
-                                All patient data is processed locally and never transmitted to external servers. 
-                                The system maintains strict confidentiality and complies with healthcare data protection standards.
+                                Manual inputs and uploaded PDFs are sent to the hosted Flask server for processing. Use de-identified reports.
                             </p>
                             
                             <h6><i class="fas fa-microscope text-success me-2"></i>Clinical Supervision</h6>
                             <p>
                                 AI predictions should always be reviewed by qualified healthcare professionals. 
-                                The system is designed to augment, not replace, clinical judgment.
+                                A prototype prediction does not establish a diagnosis.
                             </p>
                         </div>
                         <div class="col-md-6">
@@ -178,10 +177,9 @@
                                 <li>Population-specific performance variations</li>
                             </ul>
                             
-                            <h6><i class="fas fa-graduation-cap text-info me-2"></i>Continuous Learning</h6>
+                            <h6><i class="fas fa-graduation-cap text-info me-2"></i>Fixed Model</h6>
                             <p>
-                                The model is regularly updated with new clinical data to improve accuracy 
-                                and reduce bias in predictions across diverse patient populations.
+                                Predictions use a fixed PyTorch checkpoint. Submissions do not retrain it.
                             </p>
                         </div>
                     </div>
@@ -203,13 +201,13 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="alert alert-info">
-                                <h6><i class="fas fa-shield-alt me-2"></i>Privacy Commitment</h6>
+                                <h6><i class="fas fa-shield-alt me-2"></i>What the Server Receives</h6>
                                 <ul class="mb-0">
-                                    <li><strong>No Data Storage:</strong> Patient information is not stored after analysis</li>
-                                    <li><strong>Local Processing:</strong> All computations occur on the local system</li>
-                                    <li><strong>No External Transmission:</strong> Data never leaves the healthcare facility</li>
-                                    <li><strong>Anonymous Analytics:</strong> Only anonymized performance metrics are collected</li>
-                                    <li><strong>HIPAA Compliance:</strong> System designed to meet healthcare privacy standards</li>
+                                    <li><strong>Manual Entry:</strong> Submitted form values</li>
+                                    <li><strong>PDF Upload:</strong> Uploaded PDF contents</li>
+                                    <li><strong>Gender:</strong> Form value used if the PDF does not specify it</li>
+                                    <li><strong>Registration:</strong> Account details if you register</li>
+                                    <li><strong>Before Uploading:</strong> Remove identifiers from the report</li>
                                 </ul>
                             </div>
                         </div>
@@ -217,21 +215,21 @@
                     
                     <div class="row mt-3">
                         <div class="col-md-6">
-                            <h6><i class="fas fa-user-secret text-primary me-2"></i>Security Measures</h6>
+                            <h6><i class="fas fa-user-secret text-primary me-2"></i>Application Handling</h6>
                             <ul class="small">
-                                <li>End-to-end encryption for data in transit</li>
-                                <li>Secure authentication protocols</li>
-                                <li>Regular security audits and updates</li>
-                                <li>Access logging and monitoring</li>
+                                <li>PDF text is extracted on the server</li>
+                                <li>Prediction requests do not save an account record</li>
+                                <li>Registration stores account details separately</li>
+                                <li>Prediction diagnostics omit submitted clinical values</li>
                             </ul>
                         </div>
                         <div class="col-md-6">
-                            <h6><i class="fas fa-file-contract text-success me-2"></i>Compliance Standards</h6>
+                            <h6><i class="fas fa-file-contract text-success me-2"></i>Privacy Limitations</h6>
                             <ul class="small">
-                                <li>Healthcare Data Protection Act compliance</li>
-                                <li>Clinical laboratory improvement amendments</li>
-                                <li>Medical device software regulations</li>
-                                <li>International data protection standards</li>
+                                <li>Hosting retention practices have not been independently verified</li>
+                                <li>Healthcare privacy compliance has not been established</li>
+                                <li>Use synthetic values when exploring the prototype</li>
+                                <li>Submit only data you are authorized to share</li>
                             </ul>
                         </div>
                     </div>
@@ -246,7 +244,7 @@
             <div class="card">
                 <div class="card-header bg-dark text-white">
                     <h5 class="mb-0">
-                        <i class="fas fa-plug me-2"></i>Clinical Workflow Integration
+                        <i class="fas fa-plug me-2"></i>Prediction Workflow
                     </h5>
                 </div>
                 <div class="card-body">
@@ -254,27 +252,27 @@
                         <div class="col-md-4">
                             <div class="text-center mb-3">
                                 <i class="fas fa-clipboard-list text-primary" style="font-size: 2rem;"></i>
-                                <h6 class="mt-2">EMR Integration</h6>
+                                <h6 class="mt-2">Manual Entry</h6>
                                 <p class="small text-muted">
-                                    Seamless integration with electronic medical records for efficient workflow
+                                    Enter the five model inputs directly in the form
                                 </p>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="text-center mb-3">
                                 <i class="fas fa-file-medical text-success" style="font-size: 2rem;"></i>
-                                <h6 class="mt-2">Report Generation</h6>
+                                <h6 class="mt-2">PDF Upload</h6>
                                 <p class="small text-muted">
-                                    Automated clinical reports with actionable insights and recommendations
+                                    Extract supported values from a text-based PDF
                                 </p>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="text-center mb-3">
                                 <i class="fas fa-bell text-warning" style="font-size: 2rem;"></i>
-                                <h6 class="mt-2">Alert System</h6>
+                                <h6 class="mt-2">Result Display</h6>
                                 <p class="small text-muted">
-                                    Intelligent alerts for critical values and follow-up requirements
+                                    View the prediction and the prototype's confidence and risk scores
                                 </p>
                             </div>
                         </div>
@@ -282,8 +280,8 @@
                     
                     <div class="alert alert-success mt-4">
                         <i class="fas fa-check-circle me-2"></i>
-                        <strong>Clinical Validation:</strong> This system has been validated in collaboration with healthcare professionals 
-                        and meets clinical decision support standards for accuracy and reliability.
+                        <strong>Evaluation Scope:</strong> The fixed PyTorch model was evaluated on 107 held-out records.
+                        Independent clinical validation has not been performed. Predictions do not establish a diagnosis.
                     </div>
                 </div>
             </div>

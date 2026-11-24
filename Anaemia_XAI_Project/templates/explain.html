@@ -8,7 +8,7 @@
     <div class="text-center mb-5">
         <h1 class="display-5 fw-bold mb-3">Explainable AI with SHAP</h1>
         <p class="lead text-muted">
-            Understanding how our AI model makes anaemia predictions
+            A static feature-attribution example from the historical SVM notebook
         </p>
     </div>
 
@@ -26,13 +26,11 @@
                         SHAP (SHapley Additive exPlanations) is a game theory approach to explain the output of any machine learning model.
                     </p>
                     <p>
-                        In our anaemia prediction system, SHAP helps us understand which blood parameters contribute most to each prediction, 
-                        making the AI's decision-making process transparent and trustworthy for healthcare professionals.
+                        The historical SVM notebook used SHAP to estimate how blood parameters contributed to its model outputs.
                     </p>
                     <div class="alert alert-info">
                         <i class="fas fa-info-circle me-2"></i>
-                        <strong>Why Explainability Matters:</strong> In healthcare, AI decisions must be interpretable. 
-                        SHAP provides clear, quantitative explanations for each prediction.
+                        <strong>Scope:</strong> This example describes the historical SVM experiment. Live PyTorch predictions do not generate per-request SHAP explanations.
                     </div>
                 </div>
             </div>
@@ -50,26 +48,26 @@
                 </div>
                 <div class="card-body text-center">
                     <img src="{{ url_for('static', filename='images/shap_importance.png') }}" 
-                         alt="SHAP Feature Importance" 
+                         alt="Historical SVM SHAP feature importance"
                          class="img-fluid mb-3"
                          style="max-height: 400px;"
                          onerror="this.src='data:image/svg+xml,<svg xmlns=http://www.w3.org/2000/svg width=800 height=400 viewBox=0 0 800 400><rect width=800 height=400 fill=%23f8f9fa/><text x=400 y=200 text-anchor=middle fill=%236c757d font-family=Arial font-size=18>SHAP Feature Importance Chart</text></svg>'">
                     
                     <div class="row mt-4">
                         <div class="col-md-6">
-                            <h6>How to Interpret This Chart:</h6>
+                            <h6>How to Read the Historical Chart</h6>
                             <ul class="text-start">
-                                <li><strong>Horizontal Position:</strong> Shows the impact on prediction</li>
-                                <li><strong>Color:</strong> Red indicates high values, blue indicates low values</li>
-                                <li><strong>Length:</strong> Longer bars show greater feature importance</li>
+                                <li><strong>Horizontal Position:</strong> Shows the magnitude of feature attribution</li>
+                                <li><strong>Features:</strong> Each label identifies a model input</li>
+                                <li><strong>Bar Length:</strong> Longer bars represent larger attribution magnitudes</li>
                             </ul>
                         </div>
                         <div class="col-md-6">
                             <h6>Key Insights:</h6>
                             <ul class="text-start">
-                                <li>Hemoglobin is typically the most influential factor</li>
-                                <li>MCV and MCH provide important contextual information</li>
-                                <li>Gender affects baseline reference ranges</li>
+                                <li>Attributions depend on the model and evaluation data</li>
+                                <li>The chart summarizes results from the historical SVM experiment</li>
+                                <li>The chart does not establish clinical importance</li>
                             </ul>
                         </div>
                     </div>
@@ -137,24 +135,24 @@
             <div class="card">
                 <div class="card-header bg-secondary text-white">
                     <h5 class="mb-0">
-                        <i class="fas fa-shield-alt me-2"></i>Clinical Benefits of SHAP Explainability
+                        <i class="fas fa-shield-alt me-2"></i>Using the Historical Example
                     </h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
-                            <h6><i class="fas fa-check-circle text-success me-2"></i>Trust & Transparency</h6>
-                            <p>Healthcare providers can see exactly why the AI made each prediction, building trust in the system.</p>
+                            <h6><i class="fas fa-check-circle text-success me-2"></i>Model Attribution</h6>
+                            <p>SHAP estimates how input features contributed to an output relative to a baseline.</p>
                             
-                            <h6><i class="fas fa-check-circle text-success me-2"></i>Clinical Validation</h6>
-                            <p>Doctors can validate AI predictions against their medical knowledge and experience.</p>
+                            <h6><i class="fas fa-check-circle text-success me-2"></i>Clinical Scope</h6>
+                            <p>Feature attribution does not establish clinical validity.</p>
                         </div>
                         <div class="col-md-6">
                             <h6><i class="fas fa-check-circle text-success me-2"></i>Educational Value</h6>
                             <p>Medical professionals and students can learn about complex relationships in hematological data.</p>
                             
-                            <h6><i class="fas fa-check-circle text-success me-2"></i>Regulatory Compliance</h6>
-                            <p>Meets healthcare AI requirements for explainability and transparency in decision-making.</p>
+                            <h6><i class="fas fa-check-circle text-success me-2"></i>Interpretation Limits</h6>
+                            <p>Feature attributions describe model behavior. They do not establish causation.</p>
                         </div>
                     </div>
                 </div>
@@ -176,25 +174,20 @@
                         <div class="col-md-6">
                             <h6>SHAP Values Calculation</h6>
                             <p>
-                                We use TreeExplainer for our SVM model to compute SHAP values efficiently. 
-                                Each feature gets a contribution score that shows how it pushed the prediction 
-                                away from the baseline average.
+                                The legacy SVM notebook used SHAP KernelExplainer. This page displays a static chart from that notebook.
                             </p>
                         </div>
                         <div class="col-md-6">
                             <h6>Integration with Predictions</h6>
                             <p>
-                                SHAP explanations are generated in real-time for each prediction, 
-                                providing immediate insights into the decision-making process without 
-                                compromising prediction speed.
+                                Manual and PDF requests use PyTorch. They do not calculate SHAP values.
                             </p>
                         </div>
                     </div>
                     
                     <div class="alert alert-warning mt-3">
                         <i class="fas fa-exclamation-triangle me-2"></i>
-                        <strong>Note:</strong> SHAP explanations are designed to supplement, not replace, 
-                        clinical judgment. Always consider patient history and clinical context.
+                        <strong>Note:</strong> This chart is a research example. It does not explain an individual PyTorch result or establish a diagnosis.
                     </div>
                 </div>
             </div>

@@ -8,7 +8,7 @@
     <div class="text-center mb-5">
         <h1 class="display-5 fw-bold mb-3">Counterfactual Analysis</h1>
         <p class="lead text-muted">
-            What-if scenarios: Minimal changes needed to alter prediction outcomes
+            Static what-if examples from the historical SVM notebook
         </p>
     </div>
 
@@ -23,16 +23,14 @@
                 </div>
                 <div class="card-body">
                     <p class="lead">
-                        Counterfactual analysis identifies the smallest changes needed in patient parameters to change the prediction outcome.
+                        Counterfactual analysis explores how hypothetical changes to model inputs can change a prediction.
                     </p>
                     <p>
-                        Instead of just telling you "this patient is anaemic," our system shows you exactly what needs to improve 
-                        to reach a non-anaemic state. This provides actionable insights for treatment planning and patient management.
+                        This page shows a static chart from the historical SVM notebook and illustrative examples. Live PyTorch requests do not generate individualized counterfactuals.
                     </p>
                     <div class="alert alert-info">
                         <i class="fas fa-lightbulb me-2"></i>
-                        <strong>Clinical Value:</strong> Counterfactuals help clinicians understand which parameters are most critical 
-                        for improving patient outcomes and prioritize interventions.
+                        <strong>Scope:</strong> A change in model output does not show that changing a blood measurement would improve a health outcome.
                     </div>
                 </div>
             </div>
@@ -57,19 +55,19 @@
                     
                     <div class="row mt-4">
                         <div class="col-md-6">
-                            <h6>How to Interpret This Chart:</h6>
+                            <h6>How to Read the Historical Chart</h6>
                             <ul class="text-start">
-                                <li><strong>Blue bars:</strong> Current patient values</li>
-                                <li><strong>Orange bars:</strong> Suggested target values</li>
-                                <li><strong>Arrows:</strong> Direction and magnitude of needed change</li>
+                                <li><strong>Feature labels:</strong> Inputs varied in the legacy experiment</li>
+                                <li><strong>Bars:</strong> Example amounts of input change</li>
+                                <li><strong>Scope:</strong> Historical SVM results</li>
                             </ul>
                         </div>
                         <div class="col-md-6">
                             <h6>Key Insights:</h6>
                             <ul class="text-start">
-                                <li>Shows minimal changes to alter prediction</li>
-                                <li>Prioritizes most impactful parameters</li>
-                                <li>Provides realistic clinical targets</li>
+                                <li>Illustrates how model outputs may depend on inputs</li>
+                                <li>Uses examples from a legacy model</li>
+                                <li>Does not establish clinical targets</li>
                             </ul>
                         </div>
                     </div>
@@ -84,7 +82,7 @@
             <div class="card">
                 <div class="card-header bg-info text-white">
                     <h5 class="mb-0">
-                        <i class="fas fa-user-md me-2"></i>Clinical Example Scenarios
+                        <i class="fas fa-user-md me-2"></i>Illustrative Input Scenarios
                     </h5>
                 </div>
                 <div class="card-body">
@@ -92,34 +90,34 @@
                         <div class="col-md-6">
                             <div class="card border-warning h-100 mb-3">
                                 <div class="card-header bg-warning text-dark">
-                                    <h6 class="mb-0">Scenario 1: Mild Iron Deficiency</h6>
+                                    <h6 class="mb-0">Scenario 1: Hemoglobin and MCH</h6>
                                 </div>
                                 <div class="card-body">
-                                    <p><strong>Current State:</strong> Anaemic</p>
-                                    <p><strong>Key Changes Needed:</strong></p>
+                                    <p><strong>Context:</strong> Hypothetical input values</p>
+                                    <p><strong>Illustrative Input Changes:</strong></p>
                                     <ul class="small">
                                         <li>Hemoglobin: 10.2 → 12.5 g/dL (+2.3)</li>
                                         <li>MCH: 25.8 → 29.0 pg (+3.2)</li>
                                     </ul>
-                                    <p><strong>Recommended Action:</strong> Iron supplementation and dietary changes</p>
-                                    <div class="badge bg-warning">3-6 months to target</div>
+                                    <p><strong>Scope:</strong> These values are not treatment targets</p>
+                                    <div class="badge bg-warning">Illustrative example</div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="card border-success h-100 mb-3">
                                 <div class="card-header bg-success text-white">
-                                    <h6 class="mb-0">Scenario 2: Borderline Values</h6>
+                                    <h6 class="mb-0">Scenario 2: Hemoglobin and MCV</h6>
                                 </div>
                                 <div class="card-body">
-                                    <p><strong>Current State:</strong> Anaemic</p>
-                                    <p><strong>Key Changes Needed:</strong></p>
+                                    <p><strong>Context:</strong> Hypothetical input values</p>
+                                    <p><strong>Illustrative Input Changes:</strong></p>
                                     <ul class="small">
                                         <li>Hemoglobin: 11.8 → 12.2 g/dL (+0.4)</li>
                                         <li>MCV: 78.5 → 82.0 fL (+3.5)</li>
                                     </ul>
-                                    <p><strong>Recommended Action:</strong> Nutritional optimization and monitoring</p>
-                                    <div class="badge bg-success">1-2 months to target</div>
+                                    <p><strong>Scope:</strong> A PyTorch outcome is not shown for this example</p>
+                                    <div class="badge bg-success">Illustrative example</div>
                                 </div>
                             </div>
                         </div>
@@ -135,33 +133,32 @@
             <div class="card">
                 <div class="card-header bg-secondary text-white">
                     <h5 class="mb-0">
-                        <i class="fas fa-cogs me-2"></i>How Counterfactuals Are Generated
+                        <i class="fas fa-cogs me-2"></i>How to Interpret Counterfactual Examples
                     </h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
-                            <h6><i class="fas fa-search text-primary me-2"></i>Optimization Algorithm</h6>
+                            <h6><i class="fas fa-search text-primary me-2"></i>Historical SVM Notebook</h6>
                             <p>
-                                Our system uses gradient-based optimization to find the minimal changes needed 
-                                to cross the decision boundary. The algorithm prioritizes changes that are:
+                                The historical notebook explored how varying input features could change its SVM classification.
                             </p>
                             <ul class="small">
-                                <li>Clinically realistic and achievable</li>
-                                <li>Minimal in magnitude</li>
-                                <li>Most impactful on prediction outcome</li>
+                                <li>Input changes are hypothetical</li>
+                                <li>Results depend on the model and the example</li>
+                                <li>The chart is a static notebook output</li>
                             </ul>
                         </div>
                         <div class="col-md-6">
-                            <h6><i class="fas fa-balance-scale text-success me-2"></i>Clinical Constraints</h6>
+                            <h6><i class="fas fa-balance-scale text-success me-2"></i>Scope of Live Predictions</h6>
                             <p>
-                                The counterfactual generator respects medical constraints:
+                                The live application uses a separate PyTorch model.
                             </p>
                             <ul class="small">
-                                <li>Normal physiological ranges</li>
-                                <li>Gender-specific reference values</li>
-                                <li>Realistic treatment timelines</li>
-                                <li>Clinical feasibility of changes</li>
+                                <li>Manual and PDF requests return a classification</li>
+                                <li>No per-request counterfactual optimization</li>
+                                <li>No estimated treatment timelines</li>
+                                <li>No treatment targets from these examples</li>
                             </ul>
                         </div>
                     </div>
@@ -176,7 +173,7 @@
             <div class="card">
                 <div class="card-header bg-dark text-white">
                     <h5 class="mb-0">
-                        <i class="fas fa-heartbeat me-2"></i>Clinical Benefits of Counterfactual Analysis
+                        <i class="fas fa-heartbeat me-2"></i>Uses of the Historical Examples
                     </h5>
                 </div>
                 <div class="card-body">
@@ -184,27 +181,27 @@
                         <div class="col-md-4">
                             <div class="text-center mb-3">
                                 <i class="fas fa-bullseye text-danger" style="font-size: 2rem;"></i>
-                                <h6 class="mt-2">Targeted Treatment</h6>
+                                <h6 class="mt-2">Model Behavior</h6>
                                 <p class="small text-muted">
-                                    Focus interventions on parameters that will have the greatest impact
+                                    Explore how an input change can affect a legacy model output
                                 </p>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="text-center mb-3">
                                 <i class="fas fa-clock text-warning" style="font-size: 2rem;"></i>
-                                <h6 class="mt-2">Progress Tracking</h6>
+                                <h6 class="mt-2">Example Comparison</h6>
                                 <p class="small text-muted">
-                                    Set realistic milestones and monitor improvement over time
+                                    Compare hypothetical inputs within a static example
                                 </p>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="text-center mb-3">
                                 <i class="fas fa-comments text-info" style="font-size: 2rem;"></i>
-                                <h6 class="mt-2">Patient Communication</h6>
+                                <h6 class="mt-2">Research Context</h6>
                                 <p class="small text-muted">
-                                    Explain treatment goals in clear, measurable terms
+                                    Keep model behavior separate from clinical outcomes
                                 </p>
                             </div>
                         </div>
@@ -219,9 +216,7 @@
         <div class="col-lg-10 mx-auto">
             <div class="alert alert-warning">
                 <i class="fas fa-exclamation-triangle me-2"></i>
-                <strong>Important Clinical Note:</strong> Counterfactual suggestions are based on statistical patterns 
-                and should be used as guidance alongside clinical judgment. Individual patient factors, 
-                comorbidities, and clinical context must always be considered when developing treatment plans.
+                <strong>Important Note:</strong> These are research examples. They do not provide individualized treatment recommendations or establish a diagnosis.
             </div>
         </div>
     </div>

@@ -8,7 +8,7 @@
     <div class="text-center mb-5">
         <h1 class="display-5 fw-bold mb-3">Model Visualizations</h1>
         <p class="lead text-muted">
-            Comprehensive analytics and insights from the anaemia prediction model
+            PyTorch holdout metrics and static visualizations from the historical SVM notebook
         </p>
     </div>
 
@@ -21,7 +21,7 @@
                  class="visualization-image"
                  onerror="this.src='data:image/svg+xml,<svg xmlns=http://www.w3.org/2000/svg width=300 height=250 viewBox=0 0 300 250><rect width=300 height=250 fill=%23f8f9fa/><text x=150 y=125 text-anchor=middle fill=%236c757d font-family=Arial font-size=14>SHAP Importance Chart</text></svg>'">
             <div class="visualization-title">
-                <i class="fas fa-brain me-2"></i>SHAP Feature Importance
+                <i class="fas fa-brain me-2"></i>Legacy SVM SHAP Feature Importance
             </div>
         </div>
 
@@ -32,7 +32,7 @@
                  class="visualization-image"
                  onerror="this.src='data:image/svg+xml,<svg xmlns=http://www.w3.org/2000/svg width=300 height=250 viewBox=0 0 300 250><rect width=300 height=250 fill=%23f8f9fa/><text x=150 y=125 text-anchor=middle fill=%236c757d font-family=Arial font-size=14>Counterfactual Changes</text></svg>'">
             <div class="visualization-title">
-                <i class="fas fa-exchange-alt me-2"></i>Counterfactual Analysis
+                <i class="fas fa-exchange-alt me-2"></i>Legacy SVM Counterfactual Analysis
             </div>
         </div>
 
@@ -104,22 +104,27 @@
                 <div class="card-body">
                     <div class="row text-center">
                         <div class="col-md-3">
-                            <h3 class="text-primary fw-bold">95.2%</h3>
+                            <h3 class="text-primary fw-bold">99.1%</h3>
                             <p class="text-muted mb-0">Accuracy</p>
                         </div>
                         <div class="col-md-3">
-                            <h3 class="text-success fw-bold">94.8%</h3>
+                            <h3 class="text-success fw-bold">98.0%</h3>
                             <p class="text-muted mb-0">Precision</p>
                         </div>
                         <div class="col-md-3">
-                            <h3 class="text-warning fw-bold">95.6%</h3>
+                            <h3 class="text-warning fw-bold">100%</h3>
                             <p class="text-muted mb-0">Recall</p>
                         </div>
                         <div class="col-md-3">
-                            <h3 class="text-info fw-bold">95.2%</h3>
+                            <h3 class="text-info fw-bold">99.0%</h3>
                             <p class="text-muted mb-0">F1-Score</p>
                         </div>
                     </div>
+                    <p class="small text-muted text-center mt-3 mb-0">
+                        PyTorch evaluation on 107 held-out records from a stratified 80:20 split
+                        (random_state=42). Anaemic (Result=1) is the positive class.
+                        Confusion matrix (actual rows, predicted columns, class order 0 then 1) [[57, 1], [0, 49]].
+                    </p>
                 </div>
             </div>
         </div>
@@ -147,12 +152,12 @@ const visualizationData = {
     'shap-modal': {
         title: 'SHAP Feature Importance',
         image: '{{ url_for("static", filename="images/shap_importance.png") }}',
-        description: 'SHAP values show how each feature contributes to the model predictions. Higher values indicate stronger influence on anaemia prediction.'
+        description: 'This static chart summarizes feature attribution in the historical SVM experiment. Live PyTorch predictions do not generate SHAP explanations.'
     },
     'counterfactual-modal': {
         title: 'Counterfactual Analysis',
         image: '{{ url_for("static", filename="images/counterfactual_changes.png") }}',
-        description: 'Counterfactual analysis shows minimal changes needed in features to alter prediction outcomes, providing actionable insights.'
+        description: 'This static chart shows example input changes from the historical SVM experiment. Live PyTorch predictions do not generate counterfactuals or treatment targets.'
     },
     'correlation-modal': {
         title: 'Feature Correlation Heatmap',

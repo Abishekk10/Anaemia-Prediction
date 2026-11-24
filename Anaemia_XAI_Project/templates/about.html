@@ -8,7 +8,7 @@
     <div class="text-center mb-5">
         <h1 class="display-5 fw-bold mb-3">About Anaemia AI</h1>
         <p class="lead text-muted">
-            Pioneering explainable AI for anaemia prediction and clinical decision support
+            A research prototype for anaemia prediction from CBC values
         </p>
     </div>
 
@@ -23,12 +23,10 @@
                 </div>
                 <div class="card-body">
                     <p class="lead">
-                        HemaScope XAI represents a breakthrough in medical AI, combining cutting-edge machine learning 
-                        with explainable artificial intelligence to revolutionize anaemia detection and management.
+                        HemaScope XAI predicts anaemia from manually entered CBC values or a text-based PDF.
                     </p>
                     <p>
-                        Our system goes beyond traditional machine learning by focusing on <strong>actionability and transparency</strong>, 
-                        providing healthcare professionals with not just predictions, but clear explanations and actionable insights.
+                        The active predictor is <strong>PyTorch</strong>. The project retains the SVM implementation and artifacts for historical reference, with no automatic fallback.
                     </p>
                 </div>
             </div>
@@ -51,8 +49,7 @@
                                 <div class="card-body">
                                     <h6><i class="fas fa-brain text-primary me-2"></i>XAI Integration</h6>
                                     <p>
-                                        First system to integrate both SHAP explainability and counterfactual analysis 
-                                        specifically for anaemia prediction, providing comprehensive decision support.
+                                        The historical SVM notebook includes SHAP and counterfactual experiments. The site displays their static examples.
                                     </p>
                                 </div>
                             </div>
@@ -62,8 +59,7 @@
                                 <div class="card-body">
                                     <h6><i class="fas fa-chart-line text-info me-2"></i>Risk Index</h6>
                                     <p>
-                                        Introduction of Anaemia Risk Index as a composite biomarker that combines 
-                                        multiple parameters into a single, interpretable risk score.
+                                        The app combines input values into a rule-based risk index for display.
                                     </p>
                                 </div>
                             </div>
@@ -73,10 +69,9 @@
                         <div class="col-md-6">
                             <div class="card border-success h-100 mb-3">
                                 <div class="card-body">
-                                    <h6><i class="fas fa-hospital text-success me-2"></i>Clinical Focus</h6>
+                                    <h6><i class="fas fa-hospital text-success me-2"></i>Evaluation Scope</h6>
                                     <p>
-                                        Designed specifically for clinical decision support with explanations 
-                                        tailored to healthcare professionals' needs and workflows.
+                                        PyTorch was evaluated on 107 held-out records. Independent clinical validation has not been performed.
                                     </p>
                                 </div>
                             </div>
@@ -84,10 +79,9 @@
                         <div class="col-md-6">
                             <div class="card border-warning h-100 mb-3">
                                 <div class="card-body">
-                                    <h6><i class="fas fa-shield-alt text-warning me-2"></i>Privacy First</h6>
+                                    <h6><i class="fas fa-shield-alt text-warning me-2"></i>Server Processing</h6>
                                     <p>
-                                        Local processing ensures patient data never leaves the healthcare facility, 
-                                        maintaining complete privacy and compliance.
+                                        Manual inputs and uploaded PDFs are sent to the hosted Flask server for processing. Use de-identified reports.
                                     </p>
                                 </div>
                             </div>
@@ -114,7 +108,7 @@
                                 <i class="fas fa-robot text-primary" style="font-size: 2rem;"></i>
                                 <h6 class="mt-2">Machine Learning Core</h6>
                                 <p class="small text-muted">
-                                    Support Vector Machine with optimized hyperparameters for maximum accuracy
+                                    PyTorch inference with a saved scaler for manual and PDF predictions
                                 </p>
                             </div>
                         </div>
@@ -123,16 +117,16 @@
                                 <i class="fas fa-eye text-success" style="font-size: 2rem;"></i>
                                 <h6 class="mt-2">Explainability Layer</h6>
                                 <p class="small text-muted">
-                                    SHAP and counterfactual algorithms for transparent decision-making
+                                    Static SHAP and counterfactual examples from the legacy SVM notebook
                                 </p>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="text-center mb-3">
                                 <i class="fas fa-user-md text-warning" style="font-size: 2rem;"></i>
-                                <h6 class="mt-2">Clinical Interface</h6>
+                                <h6 class="mt-2">Prediction Interface</h6>
                                 <p class="small text-muted">
-                                    Intuitive web application designed for healthcare professionals
+                                    Manual CBC form and text-based PDF upload
                                 </p>
                             </div>
                         </div>
@@ -148,27 +142,27 @@
             <div class="card">
                 <div class="card-header bg-warning text-dark">
                     <h5 class="mb-0">
-                        <i class="fas fa-users me-2"></i>Development Team & Acknowledgments
+                        <i class="fas fa-users me-2"></i>Project Components
                     </h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
-                            <h6><i class="fas fa-user-tie text-primary me-2"></i>Research Team</h6>
+                            <h6><i class="fas fa-user-tie text-primary me-2"></i>Prediction Workflow</h6>
                             <ul class="small">
-                                <li><strong>Lead Researcher:</strong> AI/ML Specialist with medical background</li>
-                                <li><strong>Clinical Advisors:</strong> Board-certified hematologists</li>
-                                <li><strong>Data Scientists:</strong> Healthcare analytics experts</li>
-                                <li><strong>Software Engineers:</strong> Full-stack development team</li>
+                                <li><strong>Manual Entry:</strong> CBC measurements</li>
+                                <li><strong>PDF Upload:</strong> Text extraction from uploaded reports</li>
+                                <li><strong>Inference:</strong> Shared PyTorch prediction pipeline</li>
+                                <li><strong>Result:</strong> Prediction, confidence score, and risk index</li>
                             </ul>
                         </div>
                         <div class="col-md-6">
-                            <h6><i class="fas fa-handshake text-success me-2"></i>Collaborations</h6>
+                            <h6><i class="fas fa-handshake text-success me-2"></i>Research Materials</h6>
                             <ul class="small">
-                                <li>Medical research institutions</li>
-                                <li>Healthcare technology partners</li>
-                                <li>Academic medical centers</li>
-                                <li>Clinical validation partners</li>
+                                <li>Labeled anaemia dataset</li>
+                                <li>PyTorch holdout metrics</li>
+                                <li>Historical SVM notebook</li>
+                                <li>Static explainability charts</li>
                             </ul>
                         </div>
                     </div>
@@ -193,16 +187,16 @@
                                 <i class="fas fa-question-circle text-primary" style="font-size: 2rem;"></i>
                                 <h6 class="mt-2">Technical Support</h6>
                                 <p class="small text-muted">
-                                    24/7 technical assistance for system implementation and troubleshooting
+                                    See the project README for documentation.
                                 </p>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="text-center mb-3">
                                 <i class="fas fa-graduation-cap text-success" style="font-size: 2rem;"></i>
-                                <h6 class="mt-2">Training</h6>
+                                <h6 class="mt-2">Examples</h6>
                                 <p class="small text-muted">
-                                    Comprehensive training programs for healthcare professionals
+                                    Static examples of feature attribution and what-if analysis
                                 </p>
                             </div>
                         </div>
@@ -211,7 +205,7 @@
                                 <i class="fas fa-comments text-warning" style="font-size: 2rem;"></i>
                                 <h6 class="mt-2">Feedback</h6>
                                 <p class="small text-muted">
-                                    Continuous improvement through user feedback and clinical insights
+                                    The project repository tracks code and documentation changes
                                 </p>
                             </div>
                         </div>
@@ -219,8 +213,8 @@
                     
                     <div class="alert alert-info mt-4">
                         <i class="fas fa-info-circle me-2"></i>
-                        <strong>Research Collaboration:</strong> We welcome collaborations with healthcare institutions, 
-                        researchers, and technology partners to advance the field of explainable AI in healthcare.
+                        <strong>Research Scope:</strong> The held-out dataset results describe this prototype's classification performance.
+                        Predictions do not establish a diagnosis.
                     </div>
                 </div>
             </div>

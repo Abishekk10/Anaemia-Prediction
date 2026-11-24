@@ -8,7 +8,7 @@
         <div class="auth-stage">
             <div class="auth-showcase fade-in">
                 <div class="auth-showcase-inner">
-                    <span class="auth-kicker">Transparent clinical intelligence</span>
+                    <span class="auth-kicker">Anaemia prediction research prototype</span>
                     <h1 class="auth-headline">
                         {% if auth_mode == "signup" %}
                         Create your Anaemia AI workspace
@@ -28,9 +28,9 @@
                     <h2>{% if auth_mode == "signup" %}Create account{% else %}Sign in{% endif %}</h2>
                     <p>
                         {% if auth_mode == "signup" %}
-                        Join the Anaemia Prediction AI portal to access transparent, AI-powered medical diagnostics.
+                        Create an account for the anaemia prediction research prototype.
                         {% else %}
-                        Sign in to continue with anaemia prediction, reports, and clinical insights.
+                        Sign in to the anaemia prediction research prototype.
                         {% endif %}
                     </p>
                 </div>
@@ -56,12 +56,12 @@
                         </div>
                         <div class="col-12">
                             <label class="form-label" for="signup_password">Secure Password</label>
-                            <input class="form-control" id="signup_password" name="password" type="password" placeholder="Secure password for medical data">
-                            <small class="auth-helper-text">Password must contain: 8+ characters, uppercase, lowercase, and number</small>
+                            <input class="form-control" id="signup_password" name="password" type="password" placeholder="Enter your password">
+                            <small class="auth-helper-text">A password is required.</small>
                         </div>
                     </div>
                     <button class="btn btn-auth-primary" type="submit">Create Workspace</button>
-                    <p class="auth-storage-note">Accounts created here are stored locally in <code>data/users.json</code> on this computer.</p>
+                    <p class="auth-storage-note">The application server stores account details in <code>data/users.json</code>.</p>
                 </form>
                 {% else %}
                 <form class="auth-form" action="{{ url_for('login') }}" method="post">

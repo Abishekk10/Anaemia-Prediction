@@ -6,9 +6,9 @@
 <div class="container">
     <!-- Header -->
     <div class="text-center mb-5">
-        <h1 class="display-5 fw-bold mb-3">Clinical & Model Insights</h1>
+        <h1 class="display-5 fw-bold mb-3">Model Evaluation and Research Context</h1>
         <p class="lead text-muted">
-            Advanced analytics and research findings from our anaemia prediction system
+            PyTorch holdout results and their limitations
         </p>
     </div>
 
@@ -26,12 +26,12 @@
                         <div class="col-md-6">
                             <div class="card border-success h-100 mb-3">
                                 <div class="card-body">
-                                    <h6><i class="fas fa-chart-line text-success me-2"></i>Model Performance</h6>
+                                    <h6><i class="fas fa-chart-line text-success me-2"></i>PyTorch Performance</h6>
                                     <ul class="small">
-                                        <li>Hemoglobin remains the dominant predictor but composite risk index improves interpretability</li>
-                                        <li>Gender shows significant interaction effects with MCV and MCH parameters</li>
-                                        <li>Counterfactual analysis reduces black-box risk by 73%</li>
-                                        <li>Model aligns with recent 2024–2025 XAI medical studies</li>
+                                        <li>Accuracy: 99.1%</li>
+                                        <li>Precision: 98.0%</li>
+                                        <li>Recall: 100%</li>
+                                        <li>F1-score: 99.0%</li>
                                     </ul>
                                 </div>
                             </div>
@@ -39,12 +39,12 @@
                         <div class="col-md-6">
                             <div class="card border-info h-100 mb-3">
                                 <div class="card-body">
-                                    <h6><i class="fas fa-users text-info me-2"></i>Clinical Validation</h6>
+                                    <h6><i class="fas fa-users text-info me-2"></i>PyTorch Holdout Evaluation</h6>
                                     <ul class="small">
-                                        <li>Validated across 5,000+ patient records from diverse demographics</li>
-                                        <li>95.2% accuracy maintained across age groups and genders</li>
-                                        <li>Reduced false negatives by 28% compared to traditional methods</li>
-                                        <li>Clinician acceptance rate of 89% in pilot studies</li>
+                                        <li>99.1% accuracy on 107 held-out records</li>
+                                        <li>Stratified 80:20 split (random_state=42)</li>
+                                        <li>Positive class is anaemic (Result=1)</li>
+                                        <li>One false positive and zero false negatives on this test set</li>
                                     </ul>
                                 </div>
                             </div>
@@ -67,59 +67,59 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
-                            <h6><i class="fas fa-microscope text-primary me-2"></i>Feature Importance Rankings</h6>
+                            <h6><i class="fas fa-microscope text-primary me-2"></i>PyTorch Input Order</h6>
                             <div class="table-responsive">
                                 <table class="table table-sm">
                                     <thead>
                                         <tr>
-                                            <th>Rank</th>
+                                            <th>Position</th>
                                             <th>Feature</th>
-                                            <th>SHAP Value</th>
-                                            <th>Clinical Significance</th>
+                                            <th>Input Type</th>
+                                            <th>Encoding or Unit</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <td>1</td>
-                                            <td>Hemoglobin</td>
-                                            <td>0.482</td>
-                                            <td><span class="badge bg-danger">Critical</span></td>
+                                            <td>Gender</td>
+                                            <td>Categorical</td>
+                                            <td><span class="badge bg-danger">Male 0, Female 1</span></td>
                                         </tr>
                                         <tr>
                                             <td>2</td>
-                                            <td>MCV</td>
-                                            <td>0.215</td>
-                                            <td><span class="badge bg-warning">High</span></td>
+                                            <td>Hemoglobin</td>
+                                            <td>Measurement</td>
+                                            <td><span class="badge bg-warning">g/dL</span></td>
                                         </tr>
                                         <tr>
                                             <td>3</td>
                                             <td>MCH</td>
-                                            <td>0.178</td>
-                                            <td><span class="badge bg-warning">High</span></td>
+                                            <td>Measurement</td>
+                                            <td><span class="badge bg-warning">pg</span></td>
                                         </tr>
                                         <tr>
                                             <td>4</td>
                                             <td>MCHC</td>
-                                            <td>0.092</td>
-                                            <td><span class="badge bg-info">Medium</span></td>
+                                            <td>Measurement</td>
+                                            <td><span class="badge bg-info">g/dL</span></td>
                                         </tr>
                                         <tr>
                                             <td>5</td>
-                                            <td>Gender</td>
-                                            <td>0.033</td>
-                                            <td><span class="badge bg-secondary">Low</span></td>
+                                            <td>MCV</td>
+                                            <td>Measurement</td>
+                                            <td><span class="badge bg-secondary">fL</span></td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <h6><i class="fas fa-brain text-info me-2"></i>Model Insights</h6>
+                            <h6><i class="fas fa-brain text-info me-2"></i>Evaluation Limits</h6>
                             <ul class="small">
-                                <li><strong>Non-linear Relationships:</strong> Complex interactions between parameters improve prediction accuracy</li>
-                                <li><strong>Gender-Specific Patterns:</strong> Different parameter importance between males and females</li>
-                                <li><strong>Age Correlations:</strong> Strong correlation between age and MCV/MCH patterns</li>
-                                <li><strong>Threshold Effects:</strong> Clear decision boundaries identified at specific parameter combinations</li>
+                                <li><strong>Dataset:</strong> Results describe a single holdout.</li>
+                                <li><strong>Subgroups:</strong> Subgroup performance has not been established.</li>
+                                <li><strong>Input scope:</strong> Age is not a model input.</li>
+                                <li><strong>Explainability:</strong> Historical SVM charts do not explain live PyTorch predictions.</li>
                             </ul>
                         </div>
                     </div>
@@ -134,30 +134,30 @@
             <div class="card">
                 <div class="card-header bg-info text-white">
                     <h5 class="mb-0">
-                        <i class="fas fa-heartbeat me-2"></i>Clinical Impact Assessment
+                        <i class="fas fa-heartbeat me-2"></i>Holdout Results at a Glance
                     </h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-4">
                             <div class="text-center mb-3">
-                                <h3 class="text-primary fw-bold">42%</h3>
-                                <p class="text-muted">Reduction in diagnostic time</p>
-                                <p class="small">Average time to diagnosis reduced from 5 days to 3 days</p>
+                                <h3 class="text-primary fw-bold">107</h3>
+                                <p class="text-muted">Held-out records</p>
+                                <p class="small">58 non-anaemic and 49 anaemic records</p>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="text-center mb-3">
-                                <h3 class="text-success fw-bold">28%</h3>
-                                <p class="text-muted">Fewer unnecessary tests</p>
-                                <p class="small">Reduction in additional laboratory investigations</p>
+                                <h3 class="text-success fw-bold">1</h3>
+                                <p class="text-muted">False positive</p>
+                                <p class="small">One non-anaemic record was classified as anaemic</p>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="text-center mb-3">
-                                <h3 class="text-warning fw-bold">67%</h3>
-                                <p class="text-muted">Improved treatment planning</p>
-                                <p class="small">More targeted and effective treatment strategies</p>
+                                <h3 class="text-warning fw-bold">0</h3>
+                                <p class="text-muted">False negatives</p>
+                                <p class="small">All 49 anaemic records were identified on this holdout</p>
                             </div>
                         </div>
                     </div>
@@ -172,27 +172,27 @@
             <div class="card">
                 <div class="card-header bg-warning text-dark">
                     <h5 class="mb-0">
-                        <i class="fas fa-flask me-2"></i>Research Validation & Studies
+                        <i class="fas fa-flask me-2"></i>Evidence and Scope
                     </h5>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6">
-                            <h6><i class="fas fa-book text-primary me-2"></i>Published Research</h6>
+                            <h6><i class="fas fa-book text-primary me-2"></i>Evaluation Method</h6>
                             <ul class="small">
-                                <li><strong>2024 Study:</strong> "XAI in Hematology: A Comprehensive Review" - Journal of Medical AI</li>
-                                <li><strong>2024 Study:</strong> "Counterfactual Analysis in Clinical Decision Support" - Nature Medicine</li>
-                                <li><strong>2025 Study:</strong> "SHAP Applications in Anaemia Detection" - Lancet Digital Health</li>
-                                <li><strong>2025 Study:</strong> "Ethical AI in Healthcare: Privacy-Preserving Methods" - NEJM AI</li>
+                                <li><strong>Preprocessing:</strong> Exact duplicate rows removed, keeping the first occurrence</li>
+                                <li><strong>Split:</strong> Stratified 80:20 split with random_state=42</li>
+                                <li><strong>Artifacts:</strong> Saved checkpoint and scaler used without refitting</li>
+                                <li><strong>Classification:</strong> Sigmoid threshold of 0.5, with Result=1 as the positive class</li>
                             </ul>
                         </div>
                         <div class="col-md-6">
-                            <h6><i class="fas fa-award text-success me-2"></i>Clinical Trials</h6>
+                            <h6><i class="fas fa-award text-success me-2"></i>Limits of the Evidence</h6>
                             <ul class="small">
-                                <li><strong>Phase I:</strong> 500 patients, 95% accuracy, 0 adverse events</li>
-                                <li><strong>Phase II:</strong> 2,000 patients, multi-center validation</li>
-                                <li><strong>Phase III:</strong> 5,000 patients, real-world deployment study</li>
-                                <li><strong>Regulatory Status:</strong> FDA clearance pending, CE mark obtained</li>
+                                <li><strong>Validation:</strong> Independent clinical validation has not been performed.</li>
+                                <li><strong>Documentation:</strong> Clinical trials and regulatory clearance are not documented.</li>
+                                <li><strong>Outcomes:</strong> The holdout did not measure clinical workflows or patient outcomes.</li>
+                                <li><strong>Use:</strong> Predictions do not establish a diagnosis.</li>
                             </ul>
                         </div>
                     </div>
@@ -217,7 +217,7 @@
                                 <i class="fas fa-dna text-primary" style="font-size: 2rem;"></i>
                                 <h6 class="mt-2">Genomic Integration</h6>
                                 <p class="small text-muted">
-                                    Incorporating genetic markers for personalized medicine approaches
+                                    A possible research direction for future models
                                 </p>
                             </div>
                         </div>
@@ -226,7 +226,7 @@
                                 <i class="fas fa-globe text-success" style="font-size: 2rem;"></i>
                                 <h6 class="mt-2">Population Studies</h6>
                                 <p class="small text-muted">
-                                    Expanding validation across diverse ethnic and geographic populations
+                                    Evaluate generalization on independent datasets
                                 </p>
                             </div>
                         </div>
@@ -235,7 +235,7 @@
                                 <i class="fas fa-mobile-alt text-warning" style="font-size: 2rem;"></i>
                                 <h6 class="mt-2">Mobile Integration</h6>
                                 <p class="small text-muted">
-                                    Point-of-care testing integration with smartphone applications
+                                    A possible future interface for entering CBC values
                                 </p>
                             </div>
                         </div>
@@ -243,8 +243,8 @@
                     
                     <div class="alert alert-info mt-4">
                         <i class="fas fa-info-circle me-2"></i>
-                        <strong>Research Collaboration:</strong> We are actively seeking collaborations with healthcare institutions 
-                        for clinical validation studies and implementation research.
+                        <strong>Research Context:</strong> The metrics apply to the evaluated dataset holdout.
+                        External validation would be needed to assess performance on other populations.
                     </div>
                 </div>
             </div>
